@@ -1,7 +1,5 @@
 package com.codecool.ulti;
 
-import java.util.HashMap;
-
 /**
  * Created by peter on 2017.05.22..
  */
@@ -12,14 +10,26 @@ public class Card {
     private String color;
     private String name;
 
-    public Card(Deck.Color color, Deck.Name name) {
-        this.absoluteValue = name.getIntValue();
+    public Card(Deck.Color color, Deck.Power power) {
+        this.absoluteValue = power.getIntValue();
         this.color = color.name();
-        this.name = name.name();
+        this.name = power.name();
     }
 
     @Override
     public String toString() {
         return name + " of " + color;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public int getAbsoluteValue() {
+        return absoluteValue;
     }
 }

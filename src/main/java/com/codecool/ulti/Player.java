@@ -1,21 +1,20 @@
 package com.codecool.ulti;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by peter on 2017.05.22..
  */
 public class Player {
 
-    private static final Player[] players = new Player[3];
+    static final Player[] players = new Player[3];
 
     private String name;
     private int points;
     private Role role;
-    private List<Card> hand = new ArrayList<Card>();
-    private List<Card> deck = new ArrayList<Card>();
+    private Random random = new Random();
+    private Map<Integer, Card> hand = new HashMap<Integer, Card>();
+    private List<Card> selfDeck = new ArrayList<Card>();
 
     public Player(String name) {
         if (Arrays.asList(players).contains(null)) {
@@ -25,6 +24,32 @@ public class Player {
             for (int i = 0; i < players.length; i++) {
                 if (players[i] == null) {players[i] = this;break;}
             }
+        }
+    }
+
+    public void printHand() {
+        System.out.println("\n" + this.name + " player's cards are: ");
+        for (Integer key: this.hand.keySet()) {
+            System.out.print(Integer.toString(key) + " : " + this.hand.get(key) + ", ");
+        }
+    }
+
+    public void orderHand() {
+        final List<Card> values = new ArrayList<Card>(this.hand.values());
+        Collections.sort(values, new Comparator<Card>() {
+            public int compare(Card o1, Card o2) {
+                int value1 = o1.getColor().compareTo(o2.getColor());
+                if (value1 == 0) {
+                    return o1.getAbsoluteValue() > o2.getAbsoluteValue() ? -1
+                            :o1.getAbsoluteValue() < o2.getAbsoluteValue() ? 1
+                            : 0;
+                }
+                return value1;
+            }
+        });
+        this.hand.clear();
+        for (Card card: values) {
+            this.hand.put(this.hand.size()+1, card);
         }
     }
 
@@ -48,24 +73,24 @@ public class Player {
         this.role = role;
     }
 
-    public List<Card> getHand() {
-        return hand;
-    }
-
-    public void setHand(List<Card> hand) {
-        this.hand = hand;
-    }
-
     public List<Card> getDeck() {
-        return deck;
+        return selfDeck;
     }
 
     public void setDeck(List<Card> deck) {
-        this.deck = deck;
+        this.selfDeck = deck;
     }
 
     public static Player[] getPlayers() {
         return players;
+    }
+
+    public Map<Integer, Card> getHand() {
+        return hand;
+    }
+
+    public void setHand(Map<Integer, Card> hand) {
+        this.hand = hand;
     }
 
     enum Role {

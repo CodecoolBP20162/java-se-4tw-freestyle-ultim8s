@@ -1,29 +1,43 @@
 package com.codecool.ulti;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by peter on 2017.05.22..
  */
 public class Deck {
 
-    List<Card> deck = new ArrayList<Card>();
+    private static List<Card> deck = new ArrayList<Card>();
+    Random random = new Random();
 
     public Deck() {
 
         for (Color color : Color.values()) {
-            for (Name name : Name.values()) {
-                deck.add(new Card(color, name));
+            for (Power power : Power.values()) {
+                deck.add(new Card(color, power));
             }
         }
         Collections.shuffle(deck);
     }
 
+
+
     public void printDeck() {
         for (Card card : deck) {
             System.out.print(card.toString() + ", ");
+        }
+    }
+
+    public void deal() {
+        if (!Arrays.asList(Player.players).contains(null)) {
+            for (Player player: Player.players) {
+                for (int i = 0; i < 10; i++) {
+                    int pick = random.nextInt(Deck.getDeck().size());
+                    player.getHand().put(pick, Deck.getDeck().get(pick));
+                    Deck.getDeck().remove(pick);
+                }
+                player.orderHand();
+            }
         }
     }
 
@@ -34,24 +48,28 @@ public class Deck {
         LEAVES
     }
 
-    protected enum Name {
-        SEVEN(7),
-        EIGHT(8),
-        NINE(9),
-        TEN(10),
-        UNDER(11),
-        OVER(12),
-        KING(13),
-        ACE(14);
+    protected enum Power {
+        SEVEN(1),
+        EIGHT(2),
+        NINE(3),
+        UNDER(4),
+        OVER(5),
+        KING(6),
+        TEN(7),
+        ACE(8);
 
         private int value;
 
-        Name(int newValue) {
+        Power(int newValue) {
             int value = newValue;
         }
 
         public int getIntValue() {return value;}
 
+    }
+
+    public static List<Card> getDeck() {
+        return deck;
     }
 
 

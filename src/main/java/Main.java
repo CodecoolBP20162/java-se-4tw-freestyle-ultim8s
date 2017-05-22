@@ -11,5 +11,9 @@ public class Main {
         Player player1 = new Player("Peti");
         Player player2 = new Player("Matyi");
         Player player3 = new Player("Tomi");
+        deck.deal();
+        player1.printHand();
+        player2.printHand();
+        player3.printHand();
     }
 }
