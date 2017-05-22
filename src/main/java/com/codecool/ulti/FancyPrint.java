@@ -16,7 +16,7 @@ public class FancyPrint {
 
         System.out.println();
         for (Map.Entry<Integer, Card> players: player.getHand().entrySet()) {
-            System.out.print(players.getKey()+"          ");
+            System.out.print(players.getKey()+"[]        ");
         }
         System.out.println();
         for (Card card: player.getHand().values()) {
