@@ -28,7 +28,7 @@ public class Player {
     }
 
     public void printHand() {
-        System.out.println("\n\n" + this.name + " player's cards are: ");
+        System.out.println("\n\nPlayer " + this.name + "'s cards are: ");
         FancyPrint fancyPrint = new FancyPrint();
         fancyPrint.printHand(this);
     }

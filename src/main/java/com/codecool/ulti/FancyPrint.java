@@ -45,7 +45,7 @@ public class FancyPrint {
         }
         System.out.println();
         for (Card card: player.getHand().values()) {
-            System.out.print("     of    ");
+            System.out.print("|    of   |");
         }
         System.out.println();
         for (Card card: player.getHand().values()) {
@@ -62,18 +62,20 @@ public class FancyPrint {
         }
         System.out.println();
         for (Card card: player.getHand().values()) {
-            System.out.print("|_________|");
+            System.out.print("| _ _ _ _ |");
         }
 
     }
 
     private void fill(int filler, String string) {
-        for (int i = 0; i < filler; i++) {
+        System.out.print("|");
+        for (int i = 0; i < filler-1; i++) {
             System.out.print(" ");
         }
         System.out.print(string);
-        for (int i = 0; i < 11-filler-string.length(); i++) {
+        for (int i = 0; i < 10-filler-string.length(); i++) {
             System.out.print(" ");
         }
+        System.out.print("|");
     }
 }
