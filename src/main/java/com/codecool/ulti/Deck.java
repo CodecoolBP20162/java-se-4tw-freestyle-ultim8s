@@ -29,12 +29,14 @@ public class Deck {
     }
 
     public void deal() {
+        int count = 0;
         if (!Arrays.asList(Player.players).contains(null)) {
             for (Player player: Player.players) {
                 for (int i = 0; i < 10; i++) {
-                    int pick = random.nextInt(Deck.getDeck().size());
-                    player.getHand().put(pick, Deck.getDeck().get(pick));
-                    Deck.getDeck().remove(pick);
+                    int pick = random.nextInt(deck.size());
+                    player.getHand().put(count, deck.get(pick));
+                    deck.remove(pick);
+                    count++;
                 }
                 player.orderHand();
             }

@@ -28,10 +28,9 @@ public class Player {
     }
 
     public void printHand() {
-        System.out.println("\n" + this.name + " player's cards are: ");
-        for (Integer key: this.hand.keySet()) {
-            System.out.print(Integer.toString(key) + " : " + this.hand.get(key) + ", ");
-        }
+        System.out.println("\n\n" + this.name + " player's cards are: ");
+        FancyPrint fancyPrint = new FancyPrint();
+        fancyPrint.printHand(this);
     }
 
     public void orderHand() {
@@ -40,9 +39,11 @@ public class Player {
             public int compare(Card o1, Card o2) {
                 int value1 = o1.getColor().compareTo(o2.getColor());
                 if (value1 == 0) {
-                    return o1.getAbsoluteValue() > o2.getAbsoluteValue() ? -1
-                            :o1.getAbsoluteValue() < o2.getAbsoluteValue() ? 1
-                            : 0;
+//                    return o1.getAbsoluteValue() > o2.getAbsoluteValue() ? 1
+//                            :o1.getAbsoluteValue() < o2.getAbsoluteValue() ? -1
+//                            : 0;
+                    int value2 = Integer.compare(o1.getAbsoluteValue(), o2.getAbsoluteValue());
+                    return value2;
                 }
                 return value1;
             }
