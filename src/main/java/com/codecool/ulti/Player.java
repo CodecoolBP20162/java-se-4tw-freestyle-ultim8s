@@ -34,22 +34,23 @@ public class Player {
 
     public void orderHand() {
         final List<Card> values = new ArrayList<Card>(this.hand.values());
-        Collections.sort(values, new Comparator<Card>() {
-            public int compare(Card o1, Card o2) {
-                int value1 = o1.getColor().compareTo(o2.getColor());
-                if (value1 == 0) {
-//                    return o1.getAbsoluteValue() > o2.getAbsoluteValue() ? 1
-//                            :o1.getAbsoluteValue() < o2.getAbsoluteValue() ? -1
-//                            : 0;
-                    int value2 = Integer.compare(o1.getAbsoluteValue(), o2.getAbsoluteValue());
-                    return value2;
-                }
-                return value1;
-            }
-        });
+        List<Card> orderer = new ArrayList<Card>();
         this.hand.clear();
-        for (Card card: values) {
-            this.hand.put(this.hand.size()+1, card);
+        for (Deck.Color color: Deck.Color.values()) {
+            orderer.clear();
+            for (Card card: values) {
+                if (card.getColor() == color.name()) {
+                    orderer.add(card);
+                }
+            }
+            Collections.sort(orderer, new Comparator<Card>() {
+                public int compare(Card o1, Card o2) {
+                    return o1.getAbsoluteValue()-o2.getAbsoluteValue();
+                }
+            });
+            for (Card card: orderer) {
+                this.hand.put(this.hand.size()+1, card);
+            }
         }
     }
 

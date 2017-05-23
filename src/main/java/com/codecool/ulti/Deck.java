@@ -11,6 +11,9 @@ public class Deck {
     Random random = new Random();
     private boolean isDealed;
 
+    /**
+     * Deck constructor. Uses the set enums to create a deck of 32 card objects, then shuffles it.
+     */
     public Deck() {
         List<Card> deck = new ArrayList<Card>();
         for (Color color : Color.values()) {
@@ -25,11 +28,16 @@ public class Deck {
     }
 
 
-
+    /**
+     * Prints the total deck.
+     */
     public void printDeck() {
         System.out.println(Arrays.toString(shuffledDeck.toArray()));
     }
 
+    /**
+     * Deals the
+     */
     public void deal() {
         if (!isDealed) {
             isDealed = true;
@@ -61,11 +69,9 @@ public class Deck {
         TEN(7),
         ACE(8);
 
-        private int value;
+        private final int value;
 
-        Power(int newValue) {
-            int value = newValue;
-        }
+        private Power(int value) {this.value = value;}
 
         public int getIntValue() {return value;}
 
