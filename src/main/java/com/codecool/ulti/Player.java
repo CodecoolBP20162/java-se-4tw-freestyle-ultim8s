@@ -12,7 +12,6 @@ public class Player {
     private String name;
     private int points;
     private Role role;
-    private Random random = new Random();
     private Map<Integer, Card> hand = new HashMap<Integer, Card>();
     private List<Card> selfDeck = new ArrayList<Card>();
 
