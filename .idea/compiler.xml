@@ -9,8 +9,8 @@
         <module name="java-se-4tw-freestyle-ultim8s" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="java-se-4tw-freestyle-ultim8s" target="1.5" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="java-se-4tw-freestyle-ultim8s" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
