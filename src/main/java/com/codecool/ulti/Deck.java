@@ -31,8 +31,8 @@ public class Deck extends Hand{
     /**
      * Prints the total deck.
      */
-    public void printDeck() {
-        System.out.println(Arrays.toString(shuffledDeck.toArray()));
+    public Map<Integer, Card> getTalon() {
+        return hand;
     }
 
     /**
@@ -50,6 +50,8 @@ public class Deck extends Hand{
                 }
             }
         }
+        hand.put(1,(Card) shuffledDeck.pop());
+        hand.put(2,(Card) shuffledDeck.pop());
     }
 
     /**

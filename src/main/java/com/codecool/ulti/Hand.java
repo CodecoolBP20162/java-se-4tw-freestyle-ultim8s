@@ -16,58 +16,59 @@ public class Hand {
      * Prints the hand of the player with super fancy graphics.
      */
     public void printHand() {
+        if(hand.size()>0){
+            int filler = 0;
 
-        int filler = 0;
-
-        System.out.println();
-        for (Map.Entry<Integer, Card> players: hand.entrySet()) {
-            System.out.print(players.getKey()+"[]        ");
-        }
-        System.out.println();
-        for (Card card: hand.values()) {
-            System.out.print(" _ _ _ _ _ ");
-        }
-        System.out.println();
-        for (Card card: hand.values()) {
-            System.out.print("|         |");
-        }
-        System.out.println();
-        for (Card card: hand.values()) {
-            switch (card.getName().length()) {
-                case 1: filler = 5; break;
-                case 2: filler = 5; break;
-                case 3: filler = 4; break;
-                case 4: filler = 4; break;
-                case 5: filler = 3; break;
-                case 6: filler = 3; break;
-                case 7: filler = 2; break;
+            System.out.println();
+            for (Map.Entry<Integer, Card> players: hand.entrySet()) {
+                System.out.print(players.getKey()+"[]        ");
             }
-            fill(filler, card.getName());
-        }
-        System.out.println();
-        for (Card card: hand.values()) {
-            System.out.print("|         |");
-        }
-        System.out.println();
-        for (Card card: hand.values()) {
-            System.out.print("|    of   |");
-        }
-        System.out.println();
-        for (Card card: hand.values()) {
-            System.out.print("|         |");
-        }
-        System.out.println();
-        for (Card card: hand.values()) {
-            switch (card.getColor().length()) {
-                case 5: filler = 3; break;
-                case 6: filler = 3; break;
-                case 7: filler = 2; break;
+            System.out.println();
+            for (Card card: hand.values()) {
+                System.out.print(" _ _ _ _ _ ");
             }
-            fill(filler, card.getColor());
-        }
-        System.out.println();
-        for (Card card: hand.values()) {
-            System.out.print("| _ _ _ _ |");
+            System.out.println();
+            for (Card card: hand.values()) {
+                System.out.print("|         |");
+            }
+            System.out.println();
+            for (Card card: hand.values()) {
+                switch (card.getName().length()) {
+                    case 1: filler = 5; break;
+                    case 2: filler = 5; break;
+                    case 3: filler = 4; break;
+                    case 4: filler = 4; break;
+                    case 5: filler = 3; break;
+                    case 6: filler = 3; break;
+                    case 7: filler = 2; break;
+                }
+                fill(filler, card.getName());
+            }
+            System.out.println();
+            for (Card card: hand.values()) {
+                System.out.print("|         |");
+            }
+            System.out.println();
+            for (Card card: hand.values()) {
+                System.out.print("|    of   |");
+            }
+            System.out.println();
+            for (Card card: hand.values()) {
+                System.out.print("|         |");
+            }
+            System.out.println();
+            for (Card card: hand.values()) {
+                switch (card.getColor().length()) {
+                    case 5: filler = 3; break;
+                    case 6: filler = 3; break;
+                    case 7: filler = 2; break;
+                }
+                fill(filler, card.getColor());
+            }
+            System.out.println();
+            for (Card card: hand.values()) {
+                System.out.print("| _ _ _ _ |");
+            }
         }
 
     }

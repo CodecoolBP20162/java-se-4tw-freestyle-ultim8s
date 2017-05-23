@@ -16,6 +16,8 @@ public class Controller {
     private static Scanner scanner = new Scanner(System.in);
     int whoseTurn = 0;
     String bid = "";
+    Deck deck = new Deck();
+    Talon talon = new Talon();
 
 
     public void play() {
@@ -27,14 +29,12 @@ public class Controller {
     }
 
     private void initGame() {
-        Deck deck = new Deck();
         //getPlayerNames();
         setPlayerNamesForTest();
         deck.deal();
         for (Player player : players) {
             player.printHand();
         }
-        deck.printHand();
     }
 
     private void setPlayerNamesForTest() {
@@ -53,9 +53,9 @@ public class Controller {
     }
 
     private void setTestBiding() {
-        players.get(0).setRole(SOLOIST);
+        players.get(0).setRole(PLAYER);
         players.get(1).setRole(PLAYER);
-        players.get(2).setRole(PLAYER);
+        players.get(2).setRole(SOLOIST);
     }
 
     private void biding() {
@@ -95,10 +95,9 @@ public class Controller {
     }
 
     private void handleTalon() {
-        Stack<Card> talon = Deck.getDeck();
-        for (Card card:talon) {
-            System.out.println(card);
-        }
+        talon.cards.put(1,deck.getTalon().get(1));
+        talon.cards.put(2,deck.getTalon().get(2));
+        talon.printHand();
         int i = 0;
         Player soloist = null;
         while (soloist==null) {
@@ -107,7 +106,25 @@ public class Controller {
             }
             i++;
         }
-        System.out.println(soloist.getName());
+        soloist.hand.put(11,talon.cards.remove(1));
+        soloist.hand.put(12,talon.cards.remove(2));
+        soloist.orderHand();
+        soloist.printHand();
+        putTalon(soloist);
+        talon.printHand();
+
+    }
+
+    private void putTalon(Player soloist) {
+        System.out.println("\n\nPlayer " + soloist.getName() + " please enter the first card to put into the 'talon:'");
+        String first = scanner.nextLine();
+        System.out.println("\n\nPlayer " + soloist.getName() + " please enter the second card to put into the 'talon:'");
+        String second = scanner.nextLine();
+        talon.cards.put(1,soloist.hand.remove(Integer.parseInt(first)));
+        talon.cards.put(2,soloist.hand.remove(Integer.parseInt(second)));
+        soloist.orderHand();
+        soloist.printHand();
+
     }
 
     private void playGame() {
