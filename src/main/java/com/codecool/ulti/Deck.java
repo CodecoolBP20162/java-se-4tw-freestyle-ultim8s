@@ -36,7 +36,7 @@ public class Deck {
     }
 
     /**
-     * Deals the
+     * Deals the deck from top to all players by one card.
      */
     public void deal() {
         if (!isDealed) {
@@ -52,6 +52,9 @@ public class Deck {
         }
     }
 
+    /**
+     * Color of cards.
+     */
     protected enum Color {
         BELLS,
         ACORNS,
@@ -59,6 +62,9 @@ public class Deck {
         LEAVES
     }
 
+    /**
+     * Original order value of cards.
+     */
     protected enum Power {
         SEVEN(1),
         EIGHT(2),
@@ -71,12 +77,24 @@ public class Deck {
 
         private final int value;
 
+        /**
+         * Sets the ordering value for cards.
+         * @param value Ordering value of the card.
+         */
         private Power(int value) {this.value = value;}
 
+        /**
+         *
+         * @return Returns the ordering value of the card.
+         */
         public int getIntValue() {return value;}
 
     }
 
+    /**
+     *
+     * @return Returns the shuffled deck.
+     */
     public static Stack getDeck() {
         return shuffledDeck;
     }

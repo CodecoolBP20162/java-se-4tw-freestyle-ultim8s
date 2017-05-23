@@ -9,7 +9,10 @@ import java.util.Map;
  * Created by matyi on 2017.05.22..
  */
 public class FancyPrint {
-
+    /**
+     * Prints the hand of the player with super fancy graphics.
+     * @param player
+     */
     public void printHand(Player player) {
 
         int filler = 0;
@@ -67,6 +70,11 @@ public class FancyPrint {
 
     }
 
+    /**
+     * Method used for whitespace counting.
+     * @param filler The amount of whitespace to be left before the string.
+     * @param string The name or color string for the card.
+     */
     private void fill(int filler, String string) {
         System.out.print("|");
         for (int i = 0; i < filler-1; i++) {
