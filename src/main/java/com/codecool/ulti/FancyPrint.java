@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class FancyPrint {
 
-    public void printHand(Player player) {
+    public static void printHand(Player player) {
 
         int filler = 0;
 
@@ -67,7 +67,7 @@ public class FancyPrint {
 
     }
 
-    private void fill(int filler, String string) {
+    private static void fill(int filler, String string) {
         System.out.print("|");
         for (int i = 0; i < filler-1; i++) {
             System.out.print(" ");

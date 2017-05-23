@@ -2,6 +2,7 @@ package com.codecool.ulti;
 
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.Stack;
 
 import static com.codecool.ulti.Player.Role.NOT_SET;
 import static com.codecool.ulti.Player.Role.PLAYER;
@@ -14,9 +15,18 @@ public class Controller {
     private static LinkedList<Player> players = new LinkedList<Player>();
     private static Scanner scanner = new Scanner(System.in);
     int whoseTurn = 0;
+    String bid = "";
 
 
-    public void initGame() {
+    public void play() {
+        initGame();
+        //biding();
+        setTestBiding();
+        handleTalon();
+        playGame();
+    }
+
+    private void initGame() {
         Deck deck = new Deck();
         //getPlayerNames();
         setPlayerNamesForTest();
@@ -41,8 +51,13 @@ public class Controller {
         players.add(new Player(scanner.nextLine()));
     }
 
-    public void biding() {
-        String bid = "";
+    private void setTestBiding() {
+        players.get(0).setRole(SOLOIST);
+        players.get(1).setRole(PLAYER);
+        players.get(2).setRole(PLAYER);
+    }
+
+    private void biding() {
         int witchPlayerIsBidding = whoseTurn;
         int turnsWithoutBid = 0;
         while (turnsWithoutBid < 3) {
@@ -76,10 +91,41 @@ public class Controller {
             System.out.println("\n\nPlayer " + players.get(witchPlayerIsBidding % 3).getName() + " must bid! Please place your bid.");
             bid = scanner.nextLine();
         }
-        System.out.println(bid);
-        for(Player player:players) {
-            System.out.println(player.getRole());
+    }
+
+    private void handleTalon() {
+        Stack<Card> talon = Deck.getDeck();
+        for (Card card:talon) {
+            System.out.println(card);
         }
+        int i = 0;
+        Player soloist = null;
+        while (soloist==null) {
+            if (players.get(i).getRole().equals(SOLOIST)) {
+                soloist=players.get(i);
+            }
+            i++;
+        }
+        System.out.println(soloist.getName());
+    }
+
+    private void playGame() {
+        int gameStartingPlayer = getGameStartingPlayer();
+        for (int turn=1; turn < 11; turn ++) {
+            for (int player=gameStartingPlayer; player<gameStartingPlayer+3; player++) {
+                //getInput();
+            }
+        }
+    }
+
+    private int getGameStartingPlayer() {
+        int startingPlayer=0;
+        for (Player player:players) {
+            if(player.getRole().equals(SOLOIST)) {
+                startingPlayer = players.indexOf(player);
+            }
+        }
+        return startingPlayer;
     }
 
 
