@@ -5,14 +5,13 @@ import java.util.*;
 /**
  * Created by peter on 2017.05.22..
  */
-public class Player {
+public class Player extends Hand{
 
     static final Player[] players = new Player[3];
 
     private String name;
     private int points;
     private Role role;
-    private Map<Integer, Card> hand = new HashMap<Integer, Card>();
     private List<Card> selfDeck = new ArrayList<Card>();
 
     /**
@@ -29,16 +28,7 @@ public class Player {
             }
         }
     }
-
-    /**
-     * Prints actual players hand to the screen, using fancyprint.
-     */
-    public void printHand() {
-        System.out.println("\n\nPlayer " + this.name + "'s cards are: ");
-        FancyPrint fancyPrint = new FancyPrint();
-        fancyPrint.printHand(this);
-    }
-
+    
     /**
      * Orders cards in players hand by color and ordering value.
      */

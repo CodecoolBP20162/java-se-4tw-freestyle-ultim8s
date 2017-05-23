@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Created by peter on 2017.05.22..
  */
-public class Deck {
+public class Deck extends Hand{
 
     private static Stack shuffledDeck = new Stack();
     Random random = new Random();

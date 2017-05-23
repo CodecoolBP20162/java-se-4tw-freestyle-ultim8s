@@ -1,14 +1,12 @@
 import com.codecool.ulti.Controller;
-import com.codecool.ulti.Deck;
-import com.codecool.ulti.Player;
 
-import java.util.Scanner;
+import java.io.IOException;
 
 /**
  * Created by peter on 2017.05.22..
  */
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Controller controller = new Controller();
         controller.initGame();
         ///System.out.println("\n\nPlayer "+player1.getName()+" please place your bid.");

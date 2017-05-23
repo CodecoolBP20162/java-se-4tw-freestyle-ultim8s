@@ -18,6 +18,7 @@ public class Controller {
         for (Player player: players){
             player.printHand();
         }
+        deck.printHand();
     }
 
     public LinkedList<Player> getPlayerNames() {
