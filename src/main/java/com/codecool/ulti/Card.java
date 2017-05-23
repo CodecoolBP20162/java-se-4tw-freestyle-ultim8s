@@ -65,4 +65,12 @@ public class Card {
     public int getAbsoluteValue() {
         return absoluteValue;
     }
+
+    public int getGameValue() {
+        return gameValue;
+    }
+
+    public void setGameValue(int gameValue) {
+        this.gameValue = gameValue;
+    }
 }

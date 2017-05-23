@@ -75,7 +75,7 @@ public class Player extends Hand{
      * @param points Takes an int as a parameter.
      */
     public void setPoints(int points) {
-        this.points = points;
+        this.points += points;
     }
 
     /**
@@ -108,6 +108,10 @@ public class Player extends Hand{
      */
     public Map<Integer, Card> getHand() {
         return hand;
+    }
+
+    public List<Card> getSelfDeck() {
+        return selfDeck;
     }
 
     /**
