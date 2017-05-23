@@ -34,6 +34,7 @@ public class Controller {
         for (Player player : players) {
             player.printHand();
         }
+        deck.printHand();
     }
 
     private void setPlayerNamesForTest() {

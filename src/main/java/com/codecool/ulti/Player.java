@@ -5,16 +5,19 @@ import java.util.*;
 /**
  * Created by peter on 2017.05.22..
  */
-public class Player {
+public class Player extends Hand{
 
     static final Player[] players = new Player[3];
 
     private String name;
     private int points;
     private Role role;
-    private Map<Integer, Card> hand = new HashMap<Integer, Card>();
     private List<Card> selfDeck = new ArrayList<Card>();
 
+    /**
+     * Player constructor. It takes name as a parameter and sets the points to 0 and player role to not_set. The constructor can be called only 3 times.
+     * @param name String name of the player.
+     */
     public Player(String name) {
         if (Arrays.asList(players).contains(null)) {
             this.name = name;
@@ -25,13 +28,10 @@ public class Player {
             }
         }
     }
-
-    public void printHand() {
-        System.out.println("\n\nPlayer " + this.name + "'s cards are: ");
-        FancyPrint fancyPrint = new FancyPrint();
-        fancyPrint.printHand(this);
-    }
-
+    
+    /**
+     * Orders cards in players hand by color and ordering value.
+     */
     public void orderHand() {
         final List<Card> values = new ArrayList<Card>(this.hand.values());
         List<Card> orderer = new ArrayList<Card>();
@@ -54,46 +54,65 @@ public class Player {
         }
     }
 
+    /**
+     *
+     * @return Returns name of the player.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @return Returns the points of the player.
+     */
     public int getPoints() {
         return points;
     }
 
+    /**
+     * Sets the points of the player.
+     * @param points Takes an int as a parameter.
+     */
     public void setPoints(int points) {
         this.points = points;
     }
 
+    /**
+     *
+     * @return Returns the role of the player.
+     */
     public Role getRole() {
         return role;
     }
 
+    /**
+     * Sets the role of the player.
+     * @param role Takes a Role enum as a parameter.
+     */
     public void setRole(Role role) {
         this.role = role;
     }
 
-    public List<Card> getDeck() {
-        return selfDeck;
-    }
-
-    public void setDeck(List<Card> deck) {
-        this.selfDeck = deck;
-    }
-
+    /**
+     *
+     * @return Returns the array of players.
+     */
     public static Player[] getPlayers() {
         return players;
     }
 
+    /**
+     *
+     * @return Returns the player's hand as a hashmap.
+     */
     public Map<Integer, Card> getHand() {
         return hand;
     }
 
-    public void setHand(Map<Integer, Card> hand) {
-        this.hand = hand;
-    }
-
+    /**
+     * The possible roles of the players.
+     */
     enum Role {
         NOT_SET,
         SOLOIST,
