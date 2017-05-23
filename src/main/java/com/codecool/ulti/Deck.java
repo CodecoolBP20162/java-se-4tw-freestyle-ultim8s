@@ -7,38 +7,39 @@ import java.util.*;
  */
 public class Deck {
 
-    private static List<Card> deck = new ArrayList<Card>();
+    private static Stack shuffledDeck = new Stack();
     Random random = new Random();
+    private boolean isDealed;
 
     public Deck() {
-
+        List<Card> deck = new ArrayList<Card>();
         for (Color color : Color.values()) {
             for (Power power : Power.values()) {
                 deck.add(new Card(color, power));
             }
         }
         Collections.shuffle(deck);
+        for (Card card:deck){
+            shuffledDeck.push(card);
+        }
     }
 
 
 
     public void printDeck() {
-        for (Card card : deck) {
-            System.out.print(card.toString() + ", ");
-        }
+        System.out.println(Arrays.toString(shuffledDeck.toArray()));
     }
 
     public void deal() {
-        int count = 0;
-        if (!Arrays.asList(Player.players).contains(null)) {
-            for (Player player: Player.players) {
-                for (int i = 0; i < 10; i++) {
-                    int pick = random.nextInt(deck.size());
-                    player.getHand().put(count, deck.get(pick));
-                    deck.remove(pick);
-                    count++;
+        if (!isDealed) {
+            isDealed = true;
+            if (!Arrays.asList(Player.players).contains(null)) {
+                for (Player player: Player.players) {
+                    for (int i = 0; i < 10; i++) {
+                        player.getHand().put(i+1, (Card) shuffledDeck.pop());
+                    }
+                    player.orderHand();
                 }
-                player.orderHand();
             }
         }
     }
@@ -70,8 +71,8 @@ public class Deck {
 
     }
 
-    public static List<Card> getDeck() {
-        return deck;
+    public static Stack getDeck() {
+        return shuffledDeck;
     }
 
 
