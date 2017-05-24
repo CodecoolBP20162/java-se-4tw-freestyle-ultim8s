@@ -2,6 +2,7 @@ package com.codecool.ulti;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Scanner;
 
 import static com.codecool.ulti.Player.Role.NOT_SET;
@@ -26,8 +27,15 @@ public class Controller {
         initGame();
         //biding();
         setTestBiding();
+        resetPoints();
         handleTalon();
         playGame();
+    }
+
+    private void resetPoints() {
+        for (Player player:players) {
+            player.setPoints(0);
+        }
     }
 
     private void initGame() {
@@ -59,7 +67,6 @@ public class Controller {
         players.get(1).setRole(PLAYER);
         players.get(2).setRole(PLAYER);
         bid = "pass";
-        WinCondition winCondition = new WinCondition(bid);
     }
 
     private void biding() {
@@ -94,7 +101,6 @@ public class Controller {
             System.out.println("\n\nPlayer " + players.get(witchPlayerIsBidding % 3).getName() + " must bid! Please place your bid.");
             bid = scanner.nextLine();
         }
-        winCondition = new WinCondition(bid);
     }
 
 
@@ -122,15 +128,82 @@ public class Controller {
 
     private void putTalon(Player soloist) {
         System.out.println("\n\nPlayer " + soloist.getName() + " please enter the first card to put into the 'talon:'");
-        String first = scanner.nextLine();
+        int first = scanner.nextInt();
         System.out.println("\n\nPlayer " + soloist.getName() + " please enter the second card to put into the 'talon:'");
-        String second = scanner.nextLine();
-        talon.cards.put(1, soloist.hand.remove(Integer.parseInt(first)));
-        talon.cards.put(2, soloist.hand.remove(Integer.parseInt(second)));
+        int second = scanner.nextInt();
+        talon.cards.put(1, soloist.hand.remove(first));
+        talon.cards.put(2, soloist.hand.remove(second));
         soloist.orderHand();
         soloist.printCards(soloist.getHand());
 
     }
+
+    private void count2040() {
+        for (Player player:players) {
+            Map<Integer, Card> cards = player.getHand();
+            int acornsResult = 0;
+            int leavesResult = 0;
+            int bellsResult = 0;
+            int heartsResult = 0;
+            for (Card card : cards.values()) {
+                System.out.println(player.getName());
+                System.out.println(card.getColor());
+                if (card.getColor().equals(Deck.Color.ACORNS.toString()) && (card.getName().equals(Deck.Power.OVER.toString()))) {
+                    acornsResult = acornsResult + 1;
+                }
+                if (card.getColor().equals(Deck.Color.ACORNS.toString()) && (card.getName().equals(Deck.Power.KING.toString()))) {
+                    acornsResult = acornsResult + 1;
+                }
+                if (card.getColor().equals(Deck.Color.LEAVES.toString()) && (card.getName().equals(Deck.Power.OVER.toString()))) {
+                    leavesResult = leavesResult + 1;
+                }
+                if (card.getColor().equals(Deck.Color.LEAVES.toString()) && (card.getName().equals(Deck.Power.KING.toString()))) {
+                    leavesResult = leavesResult + 1;
+                }
+                if (card.getColor().equals(Deck.Color.BELLS.toString()) && (card.getName().equals(Deck.Power.OVER.toString()))) {
+                    bellsResult = bellsResult + 1;
+                }
+                if (card.getColor().equals(Deck.Color.BELLS.toString()) && (card.getName().equals(Deck.Power.KING.toString()))) {
+                    bellsResult = bellsResult + 1;
+                }
+                if (card.getColor().equals(Deck.Color.HEARTS.toString()) && (card.getName().equals(Deck.Power.OVER.toString()))) {
+                    heartsResult = heartsResult + 1;
+                }
+                if (card.getColor().equals(Deck.Color.HEARTS.toString()) && (card.getName().equals(Deck.Power.KING.toString()))) {
+                    heartsResult = heartsResult + 1;
+                }
+            }
+            if (acornsResult == 2) {
+                if (player.trump.equals(Deck.Color.ACORNS)){
+                    player.setPoints(player.getPoints()+40);
+                } else {
+                    player.setPoints(player.getPoints()+20);
+                }
+            }
+            if (bellsResult == 2) {
+                if (player.trump.equals(Deck.Color.BELLS)){
+                    player.setPoints(player.getPoints()+40);
+                } else {
+                    player.setPoints(player.getPoints()+20);
+                }
+            }
+            if (leavesResult == 2) {
+                if (player.trump.equals(Deck.Color.LEAVES)){
+                    player.setPoints(player.getPoints()+40);
+                } else {
+                    player.setPoints(player.getPoints()+20);
+                }
+            }
+            if (heartsResult == 2) {
+                if (player.trump.equals(Deck.Color.HEARTS)){
+                    player.setPoints(player.getPoints()+40);
+                } else {
+                    player.setPoints(player.getPoints()+20);
+                }
+            }
+        }
+    }
+
 
     private void playGame() {
         int cardToPlay = 0;
@@ -138,7 +211,9 @@ public class Controller {
         ArrayList<Card> hits = new ArrayList<>();
         int turnStartingPlayerIndex = players.indexOf(currentPlayer);
         System.out.print("\n\nPlayer " + players.get(turnStartingPlayerIndex).getName() + ", please enter the trump color: ");
-        CardHolder.setTrump(scanner.nextLine());
+        CardHolder.setTrump(scanner.nextLine().toUpperCase());
+        winCondition = new WinCondition(bid);
+        count2040();
         for (int turn = 1; turn < 11; turn++) {
             for (int playerNumber = turnStartingPlayerIndex; playerNumber < turnStartingPlayerIndex + 3; playerNumber++) {
                 if (hits.isEmpty()) {
@@ -150,6 +225,7 @@ public class Controller {
                     table.printCards(table.placeHits(hits));
                 }
                 currentPlayer = players.get(playerNumber % 3);
+                currentPlayer.orderHand();
                 currentPlayer.printCards(currentPlayer.getHand());
                 currentPlayer.setPoints(hits);
                 boolean canPlay = false;
