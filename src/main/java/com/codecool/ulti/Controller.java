@@ -55,9 +55,9 @@ public class Controller {
     }
 
     private void setTestBiding() {
-        players.get(0).setRole(PLAYER);
+        players.get(0).setRole(SOLOIST);
         players.get(1).setRole(PLAYER);
-        players.get(2).setRole(SOLOIST);
+        players.get(2).setRole(PLAYER);
         bid = "pass";
         WinCondition winCondition = new WinCondition(bid);
     }
@@ -171,7 +171,9 @@ public class Controller {
                     canPlay = true;
                 }
                 hits.add(currentPlayer.hand.remove(cardToPlay));
+                table.printCards(table.placeHits(hits));
             }
+            System.out.println("Hehe");
             turnStartingPlayerIndex= players.indexOf(decideHitWinner(hits));
             hits.clear();
         }
