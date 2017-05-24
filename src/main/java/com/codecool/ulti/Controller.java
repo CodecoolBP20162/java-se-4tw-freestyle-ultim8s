@@ -19,11 +19,13 @@ public class Controller {
     String bid = "";
     Deck deck = new Deck();
     Talon talon = new Talon();
+    Player currentPlayer;
+    WinCondition winCondition;
 
 
     public void play() {
-        initGame();
-        //biding();
+//        initGame();
+        biding();
         setTestBiding();
         handleTalon();
         playGame();
@@ -91,7 +93,9 @@ public class Controller {
             System.out.println("\n\nPlayer " + players.get(witchPlayerIsBidding % 3).getName() + " must bid! Please place your bid.");
             bid = scanner.nextLine();
         }
+        winCondition = new WinCondition(bid);
     }
+
 
     private void handleTalon() {
         talon.cards.put(1,deck.getTalon().get(1));
@@ -101,15 +105,15 @@ public class Controller {
         Player soloist = null;
         while (soloist==null) {
             if (players.get(i).getRole().equals(SOLOIST)) {
-                soloist=players.get(i);
+                currentPlayer=players.get(i);
             }
             i++;
         }
-        soloist.hand.put(11,talon.cards.remove(1));
-        soloist.hand.put(12,talon.cards.remove(2));
-        soloist.orderHand();
-        soloist.printHand();
-        putTalon(soloist);
+        currentPlayer.hand.put(11,talon.cards.remove(1));
+        currentPlayer.hand.put(12,talon.cards.remove(2));
+        currentPlayer.orderHand();
+        currentPlayer.printHand();
+        putTalon(currentPlayer);
         talon.printHand();
 
     }
@@ -127,32 +131,43 @@ public class Controller {
     }
 
     private void playGame() {
+        int cardToPlay = 0;
         ArrayList<Card> hits = new ArrayList<>();
-        int gameStartingPlayerIndex = getGameStartingPlayer();
+        int turnStartingPlayerIndex = players.indexOf(currentPlayer);
+        System.out.print("Player " + players.get(turnStartingPlayerIndex).getName() + ", please enter the trump color: ");
+        Hand.setTrump(scanner.nextLine());
         for (int turn=1; turn < 11; turn ++) {
-            for (int playerNumber=gameStartingPlayerIndex; playerNumber<gameStartingPlayerIndex+3; playerNumber++) {
-                Player currentPlayer = players.get(playerNumber % 3);
-                System.out.println("\n\nPlayer " + currentPlayer.getName() + " please enter the card number you want to play:'");
-                String cardToPlay = scanner.nextLine();
-                hits.add(currentPlayer.hand.remove(Integer.parseInt(cardToPlay)));
+            for (int playerNumber=turnStartingPlayerIndex; playerNumber<turnStartingPlayerIndex+3; playerNumber++) {
+                currentPlayer = players.get(playerNumber % 3);
+                currentPlayer.setPoints(hits);
+                boolean canPlay = false;
+                while (!canPlay) {
+                    System.out.println("\n\nPlayer " + currentPlayer.getName() + " please enter the card number you want to play:'");
+                    cardToPlay = scanner.nextInt();
+                    if (!hits.isEmpty()) {
+                        if (hits.size() == 1) {
+                            if (hits.get(0).getGameValue() < currentPlayer.getHand().get(cardToPlay).getGameValue()) {
+                                canPlay = true;
+                            }
+                        }
+                        if (hits.size() == 2) {
+                            if (hits.get(1).getGameValue() < currentPlayer.getHand().get(cardToPlay).getGameValue()) {
+                                canPlay = true;
+                            }
+                        }
+                    }
+                    canPlay = true;
+                }
+                hits.add(currentPlayer.hand.remove(cardToPlay));
             }
-            decideHitWinner(hits);
+            turnStartingPlayerIndex= players.indexOf(decideHitWinner(hits));
             hits.clear();
         }
-        
+        winCondition.winCheck();
     }
 
-    private void decideHitWinner(ArrayList<Card> hits) {
-
-    }
-
-    private int getGameStartingPlayer() {
-        int startingPlayerIndex=0;
-        for (Player player:players) {
-            if(player.getRole().equals(SOLOIST)) {
-                startingPlayerIndex = players.indexOf(player);
-            }
-        }
-        return startingPlayerIndex;
+    private Player decideHitWinner(ArrayList<Card> hits) {
+        Player hitWinner=null;
+        return hitWinner;
     }
 }

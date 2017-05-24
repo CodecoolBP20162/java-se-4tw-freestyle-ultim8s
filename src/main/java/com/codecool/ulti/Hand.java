@@ -1,7 +1,6 @@
 package com.codecool.ulti;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +9,7 @@ import java.util.Map;
  */
 public class Hand {
 
-
+    public static Deck.Color trump = null;
     public Map<Integer, Card> hand = new HashMap<Integer, Card>();
     /**
      * Prints the hand of the player with super fancy graphics.
@@ -89,5 +88,35 @@ public class Hand {
             System.out.print(" ");
         }
         System.out.print("|");
+    }
+
+    public static void setTrump(String string) {
+        for (Deck.Color color: Deck.Color.values()) {
+            if (color.name().equals(string)) {
+                trump = color;
+            }
+        }
+    }
+
+    private void setPoinsPass(ArrayList<Card> hits) {
+        if (!hits.isEmpty()) {
+            for(Card card:hand.values()) {
+                card.setGameValue(0);
+                if(card.getColor().equals(trump)) {
+                    card.setGameValue(card.getAbsoluteValue()+20);
+                }
+                if(card.getColor().equals(hits.get(0))) {
+                    card.setGameValue(card.getAbsoluteValue()+10);
+                }
+            }
+        }
+    }
+
+    public void setPoints(ArrayList<Card> hits) {
+        String winCondition = WinCondition.getWinRules();
+        switch (winCondition) {
+            case "pass" : setPoinsPass(hits);
+            break;
+        }
     }
 }

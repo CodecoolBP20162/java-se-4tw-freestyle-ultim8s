@@ -110,7 +110,7 @@ public class Player extends Hand{
         return hand;
     }
 
-    public List<Card> getSelfDeck() {
+    public List<Card> hits() {
         return selfDeck;
     }
 

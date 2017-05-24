@@ -31,6 +31,7 @@ public class Card {
         this.absoluteValue = power.getIntValue();
         this.color = color.name();
         this.name = power.name();
+        this.gameValue = 0;
     }
 
     /**
