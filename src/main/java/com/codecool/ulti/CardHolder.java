@@ -11,7 +11,7 @@ public class CardHolder {
 
     public static Deck.Color trump = null;
     public Map<Integer, Card> hand = new HashMap<Integer, Card>();
-    private static Map<Integer, Card> printer = new HashMap<Integer, Card>();
+    private Map<Integer, Card> printer = new HashMap<Integer, Card>();
     /**
      * Prints the hand of the player with super fancy graphics.
      */
@@ -122,6 +122,7 @@ public class CardHolder {
     }
 
     public Map<Integer, Card> placeHits(ArrayList<Card> hits) {
+        printer.clear();
         for (Card card: hits) {
             printer.put(printer.size()+1, card);
         }

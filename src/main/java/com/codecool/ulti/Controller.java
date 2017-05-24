@@ -70,23 +70,23 @@ public class Controller {
             System.out.println("\n\nPlayer " + currentBidingPlayer.getName() + " please place your bid.");
             bid = scanner.nextLine();
             switch (bid) {
-                case "pass" :
+                case "pass":
                     turnsWithoutBid++;
                     break;
                 case "contra":
-                    turnsWithoutBid=1;
+                    turnsWithoutBid = 1;
                     break;
                 case "recontra":
-                    turnsWithoutBid=1;
+                    turnsWithoutBid = 1;
                     break;
                 case "subcontra":
-                    turnsWithoutBid=1;
+                    turnsWithoutBid = 1;
                     break;
                 default:
                     turnsWithoutBid = 0;
                     players.get(witchPlayerIsBidding % 3).setRole(SOLOIST);
-                    players.get((witchPlayerIsBidding+1) % 3).setRole(PLAYER);
-                    players.get((witchPlayerIsBidding+2) % 3).setRole(PLAYER);
+                    players.get((witchPlayerIsBidding + 1) % 3).setRole(PLAYER);
+                    players.get((witchPlayerIsBidding + 2) % 3).setRole(PLAYER);
             }
             witchPlayerIsBidding++;
         }
@@ -99,20 +99,20 @@ public class Controller {
 
 
     private void handleTalon() {
-        talon.cards.put(1,deck.getTalon().get(1));
-        talon.cards.put(2,deck.getTalon().get(2));
+        talon.cards.put(1, deck.getTalon().get(1));
+        talon.cards.put(2, deck.getTalon().get(2));
         talon.printCards(talon.cards);
         int i = 0;
         Player soloist = null;
-        while (soloist==null) {
+        while (soloist == null) {
             if (players.get(i).getRole().equals(SOLOIST)) {
-                currentPlayer=players.get(i);
+                currentPlayer = players.get(i);
                 soloist = currentPlayer;
             }
             i++;
         }
-        currentPlayer.hand.put(11,talon.cards.remove(1));
-        currentPlayer.hand.put(12,talon.cards.remove(2));
+        currentPlayer.hand.put(11, talon.cards.remove(1));
+        currentPlayer.hand.put(12, talon.cards.remove(2));
         currentPlayer.orderHand();
         currentPlayer.printCards(currentPlayer.getHand());
         putTalon(currentPlayer);
@@ -125,8 +125,8 @@ public class Controller {
         String first = scanner.nextLine();
         System.out.println("\n\nPlayer " + soloist.getName() + " please enter the second card to put into the 'talon:'");
         String second = scanner.nextLine();
-        talon.cards.put(1,soloist.hand.remove(Integer.parseInt(first)));
-        talon.cards.put(2,soloist.hand.remove(Integer.parseInt(second)));
+        talon.cards.put(1, soloist.hand.remove(Integer.parseInt(first)));
+        talon.cards.put(2, soloist.hand.remove(Integer.parseInt(second)));
         soloist.orderHand();
         soloist.printCards(soloist.getHand());
 
@@ -139,8 +139,8 @@ public class Controller {
         int turnStartingPlayerIndex = players.indexOf(currentPlayer);
         System.out.print("\n\nPlayer " + players.get(turnStartingPlayerIndex).getName() + ", please enter the trump color: ");
         CardHolder.setTrump(scanner.nextLine());
-        for (int turn=1; turn < 11; turn ++) {
-            for (int playerNumber=turnStartingPlayerIndex; playerNumber<turnStartingPlayerIndex+3; playerNumber++) {
+        for (int turn = 1; turn < 11; turn++) {
+            for (int playerNumber = turnStartingPlayerIndex; playerNumber < turnStartingPlayerIndex + 3; playerNumber++) {
                 if (hits.isEmpty()) {
                     System.out.println(" _ _ _ _ _ _ _ _ _ _ _ _  ");
                     System.out.println("|                        |");
@@ -149,8 +149,8 @@ public class Controller {
                 } else {
                     table.printCards(table.placeHits(hits));
                 }
-                currentPlayer.printCards(currentPlayer.getHand());
                 currentPlayer = players.get(playerNumber % 3);
+                currentPlayer.printCards(currentPlayer.getHand());
                 currentPlayer.setPoints(hits);
                 boolean canPlay = false;
                 while (!canPlay) {
@@ -168,20 +168,20 @@ public class Controller {
                             }
                         }
                     }
-                    canPlay = true;
+                    if (hits.isEmpty()) {
+                        canPlay = true;
+                    }
                 }
                 hits.add(currentPlayer.hand.remove(cardToPlay));
-                table.printCards(table.placeHits(hits));
             }
-            System.out.println("Hehe");
-            turnStartingPlayerIndex= players.indexOf(decideHitWinner(hits));
+            turnStartingPlayerIndex = players.indexOf(decideHitWinner(hits));
             hits.clear();
         }
         winCondition.winCheck();
     }
 
     private Player decideHitWinner(ArrayList<Card> hits) {
-        Player hitWinner=null;
+        Player hitWinner = players.get(1);
         return hitWinner;
     }
 }
