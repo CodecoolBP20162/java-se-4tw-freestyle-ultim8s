@@ -139,7 +139,7 @@ public class Controller {
             decideHitWinner(hits);
             hits.clear();
         }
-        
+
     }
 
     private void decideHitWinner(ArrayList<Card> hits) {
