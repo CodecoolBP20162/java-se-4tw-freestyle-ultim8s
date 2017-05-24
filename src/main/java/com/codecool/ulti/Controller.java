@@ -1,5 +1,6 @@
 package com.codecool.ulti;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Stack;
@@ -14,7 +15,7 @@ import static com.codecool.ulti.Player.Role.SOLOIST;
 public class Controller {
     private static LinkedList<Player> players = new LinkedList<Player>();
     private static Scanner scanner = new Scanner(System.in);
-    int whoseTurn = 0;
+    int whosePlayerTurn = 0;
     String bid = "";
     Deck deck = new Deck();
     Talon talon = new Talon();
@@ -59,26 +60,24 @@ public class Controller {
     }
 
     private void biding() {
-        int witchPlayerIsBidding = whoseTurn;
+        int witchPlayerIsBidding = whosePlayerTurn;
         int turnsWithoutBid = 0;
         while (turnsWithoutBid < 3) {
-            System.out.println("\n\nPlayer " + players.get(witchPlayerIsBidding % 3).getName() + " please place your bid.");
+            Player currentBidingPlayer = players.get(witchPlayerIsBidding % 3);
+            System.out.println("\n\nPlayer " + currentBidingPlayer.getName() + " please place your bid.");
             bid = scanner.nextLine();
             switch (bid) {
                 case "pass" :
                     turnsWithoutBid++;
                     break;
                 case "contra":
-                    witchPlayerIsBidding = whoseTurn;
-                    turnsWithoutBid=2;
+                    turnsWithoutBid=1;
                     break;
                 case "recontra":
-                    witchPlayerIsBidding = whoseTurn+1;
                     turnsWithoutBid=1;
                     break;
                 case "subcontra":
-                    witchPlayerIsBidding = whoseTurn;
-                    turnsWithoutBid=2;
+                    turnsWithoutBid=1;
                     break;
                 default:
                     turnsWithoutBid = 0;
@@ -128,23 +127,32 @@ public class Controller {
     }
 
     private void playGame() {
-        int gameStartingPlayer = getGameStartingPlayer();
+        ArrayList<Card> hits = new ArrayList<>();
+        int gameStartingPlayerIndex = getGameStartingPlayer();
         for (int turn=1; turn < 11; turn ++) {
-            for (int player=gameStartingPlayer; player<gameStartingPlayer+3; player++) {
-                //getInput();
+            for (int playerNumber=gameStartingPlayerIndex; playerNumber<gameStartingPlayerIndex+3; playerNumber++) {
+                Player currentPlayer = players.get(playerNumber % 3);
+                System.out.println("\n\nPlayer " + currentPlayer.getName() + " please enter the card number you want to play:'");
+                String cardToPlay = scanner.nextLine();
+                hits.add(currentPlayer.hand.remove(Integer.parseInt(cardToPlay)));
             }
+            decideHitWinner(hits);
+            hits.clear();
         }
+        
+    }
+
+    private void decideHitWinner(ArrayList<Card> hits) {
+
     }
 
     private int getGameStartingPlayer() {
-        int startingPlayer=0;
+        int startingPlayerIndex=0;
         for (Player player:players) {
             if(player.getRole().equals(SOLOIST)) {
-                startingPlayer = players.indexOf(player);
+                startingPlayerIndex = players.indexOf(player);
             }
         }
-        return startingPlayer;
+        return startingPlayerIndex;
     }
-
-
 }
