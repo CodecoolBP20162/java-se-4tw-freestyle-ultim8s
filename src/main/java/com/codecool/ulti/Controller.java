@@ -3,7 +3,6 @@ package com.codecool.ulti;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
-import java.util.Stack;
 
 import static com.codecool.ulti.Player.Role.NOT_SET;
 import static com.codecool.ulti.Player.Role.PLAYER;
@@ -24,8 +23,8 @@ public class Controller {
 
 
     public void play() {
-//        initGame();
-        biding();
+        initGame();
+        //biding();
         setTestBiding();
         handleTalon();
         playGame();
@@ -36,7 +35,7 @@ public class Controller {
         setPlayerNamesForTest();
         deck.deal();
         for (Player player : players) {
-            player.printHand();
+            player.printCards(player.getHand());
         }
     }
 
@@ -59,6 +58,8 @@ public class Controller {
         players.get(0).setRole(PLAYER);
         players.get(1).setRole(PLAYER);
         players.get(2).setRole(SOLOIST);
+        bid = "pass";
+        WinCondition winCondition = new WinCondition(bid);
     }
 
     private void biding() {
@@ -100,21 +101,22 @@ public class Controller {
     private void handleTalon() {
         talon.cards.put(1,deck.getTalon().get(1));
         talon.cards.put(2,deck.getTalon().get(2));
-        talon.printHand();
+        talon.printCards(talon.cards);
         int i = 0;
         Player soloist = null;
         while (soloist==null) {
             if (players.get(i).getRole().equals(SOLOIST)) {
                 currentPlayer=players.get(i);
+                soloist = currentPlayer;
             }
             i++;
         }
         currentPlayer.hand.put(11,talon.cards.remove(1));
         currentPlayer.hand.put(12,talon.cards.remove(2));
         currentPlayer.orderHand();
-        currentPlayer.printHand();
+        currentPlayer.printCards(currentPlayer.getHand());
         putTalon(currentPlayer);
-        talon.printHand();
+        talon.printCards(talon.cards);
 
     }
 
@@ -126,18 +128,28 @@ public class Controller {
         talon.cards.put(1,soloist.hand.remove(Integer.parseInt(first)));
         talon.cards.put(2,soloist.hand.remove(Integer.parseInt(second)));
         soloist.orderHand();
-        soloist.printHand();
+        soloist.printCards(soloist.getHand());
 
     }
 
     private void playGame() {
         int cardToPlay = 0;
+        CardHolder table = new CardHolder();
         ArrayList<Card> hits = new ArrayList<>();
         int turnStartingPlayerIndex = players.indexOf(currentPlayer);
-        System.out.print("Player " + players.get(turnStartingPlayerIndex).getName() + ", please enter the trump color: ");
-        Hand.setTrump(scanner.nextLine());
+        System.out.print("\n\nPlayer " + players.get(turnStartingPlayerIndex).getName() + ", please enter the trump color: ");
+        CardHolder.setTrump(scanner.nextLine());
         for (int turn=1; turn < 11; turn ++) {
             for (int playerNumber=turnStartingPlayerIndex; playerNumber<turnStartingPlayerIndex+3; playerNumber++) {
+                if (hits.isEmpty()) {
+                    System.out.println(" _ _ _ _ _ _ _ _ _ _ _ _  ");
+                    System.out.println("|                        |");
+                    System.out.println("| No cards on the table  |");
+                    System.out.println("|_ _ _ _ _ _ _ _ _ _ _ _ |");
+                } else {
+                    table.printCards(table.placeHits(hits));
+                }
+                currentPlayer.printCards(currentPlayer.getHand());
                 currentPlayer = players.get(playerNumber % 3);
                 currentPlayer.setPoints(hits);
                 boolean canPlay = false;

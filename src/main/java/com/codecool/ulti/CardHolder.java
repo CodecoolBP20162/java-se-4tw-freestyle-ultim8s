@@ -7,31 +7,32 @@ import java.util.Map;
 /**
  * Created by matyi on 2017.05.22..
  */
-public class Hand {
+public class CardHolder {
 
     public static Deck.Color trump = null;
     public Map<Integer, Card> hand = new HashMap<Integer, Card>();
+    private static Map<Integer, Card> printer = new HashMap<Integer, Card>();
     /**
      * Prints the hand of the player with super fancy graphics.
      */
-    public void printHand() {
-        if(hand.size()>0){
+    public void printCards(Map<Integer, Card> cards) {
+        if(cards.size()>0){
             int filler = 0;
 
             System.out.println();
-            for (Map.Entry<Integer, Card> players: hand.entrySet()) {
+            for (Map.Entry<Integer, Card> players: cards.entrySet()) {
                 System.out.print(players.getKey()+"[]        ");
             }
             System.out.println();
-            for (Card card: hand.values()) {
+            for (Card card: cards.values()) {
                 System.out.print(" _ _ _ _ _ ");
             }
             System.out.println();
-            for (Card card: hand.values()) {
+            for (Card card: cards.values()) {
                 System.out.print("|         |");
             }
             System.out.println();
-            for (Card card: hand.values()) {
+            for (Card card: cards.values()) {
                 switch (card.getName().length()) {
                     case 1: filler = 5; break;
                     case 2: filler = 5; break;
@@ -44,19 +45,19 @@ public class Hand {
                 fill(filler, card.getName());
             }
             System.out.println();
-            for (Card card: hand.values()) {
+            for (Card card: cards.values()) {
                 System.out.print("|         |");
             }
             System.out.println();
-            for (Card card: hand.values()) {
+            for (Card card: cards.values()) {
                 System.out.print("|    of   |");
             }
             System.out.println();
-            for (Card card: hand.values()) {
+            for (Card card: cards.values()) {
                 System.out.print("|         |");
             }
             System.out.println();
-            for (Card card: hand.values()) {
+            for (Card card: cards.values()) {
                 switch (card.getColor().length()) {
                     case 5: filler = 3; break;
                     case 6: filler = 3; break;
@@ -65,7 +66,7 @@ public class Hand {
                 fill(filler, card.getColor());
             }
             System.out.println();
-            for (Card card: hand.values()) {
+            for (Card card: cards.values()) {
                 System.out.print("| _ _ _ _ |");
             }
         }
@@ -118,5 +119,12 @@ public class Hand {
             case "pass" : setPoinsPass(hits);
             break;
         }
+    }
+
+    public Map<Integer, Card> placeHits(ArrayList<Card> hits) {
+        for (Card card: hits) {
+            printer.put(printer.size()+1, card);
+        }
+        return printer;
     }
 }

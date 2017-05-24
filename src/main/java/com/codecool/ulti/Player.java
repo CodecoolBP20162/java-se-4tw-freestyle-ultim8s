@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Created by peter on 2017.05.22..
  */
-public class Player extends Hand{
+public class Player extends CardHolder {
 
     static final Player[] players = new Player[3];
 
