@@ -12,7 +12,7 @@ public class Player extends CardHolder {
     private String name;
     private int points;
     private Role role;
-    private List<Card> selfDeck = new ArrayList<Card>();
+    private List<Card> hitedCards = new ArrayList<Card>();
 
     /**
      * Player constructor. It takes name as a parameter and sets the points to 0 and player role to not_set. The constructor can be called only 3 times.
@@ -110,8 +110,12 @@ public class Player extends CardHolder {
         return hand;
     }
 
+    public void addCardToHitedCards(Card card) {
+        hitedCards.add(card);
+    }
+
     public List<Card> hits() {
-        return selfDeck;
+        return hitedCards;
     }
 
     /**
