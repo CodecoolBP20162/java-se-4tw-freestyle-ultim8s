@@ -24,6 +24,7 @@ public class Card {
 
     /**
      * Card constructor, it takes two enum parameters.
+     *
      * @param color The color of the card (Acorns, Bells, Leaves, Hearts)
      * @param power The cards absolute value for ordering purposes.
      */
@@ -35,7 +36,6 @@ public class Card {
     }
 
     /**
-     *
      * @return Returns the name and color of the card in a string.
      */
     @Override
@@ -44,7 +44,6 @@ public class Card {
     }
 
     /**
-     *
      * @return Returns the name of the card.
      */
     public String getName() {
@@ -52,7 +51,6 @@ public class Card {
     }
 
     /**
-     *
      * @return Returns the color of the card.
      */
     public String getColor() {
@@ -60,7 +58,6 @@ public class Card {
     }
 
     /**
-     *
      * @return Returns the absolute value of the card, for ordering purposes.
      */
     public int getAbsoluteValue() {
