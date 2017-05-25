@@ -12,6 +12,7 @@ public class CardHolder {
     private Map<Integer, Card> printer = new HashMap<Integer, Card>();
     private List<String> colors = new LinkedList<>();
     private List<Integer> powers = new LinkedList<>();
+    private String coloring;
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -34,11 +35,12 @@ public class CardHolder {
             }
             System.out.println();
             for (Card card: cards.values()) {
-                System.out.print(" _ _ _ _ _ ");
+
+                System.out.print(coloring+ " _ _ _ _ _ "+ANSI_RESET);
             }
             System.out.println();
             for (Card card: cards.values()) {
-                System.out.print("|         |");
+                System.out.print("|         |"+ANSI_RESET);
             }
             System.out.println();
             for (Card card: cards.values()) {
@@ -55,11 +57,11 @@ public class CardHolder {
             }
             System.out.println();
             for (Card card: cards.values()) {
-                System.out.print("|         |");
+                System.out.print("|         |"+ANSI_RESET);
             }
             System.out.println();
             for (Card card: cards.values()) {
-                System.out.print("|    of   |");
+                System.out.print("|    of   |"+ANSI_RESET);
             }
             System.out.println();
             for (Card card: cards.values()) {
