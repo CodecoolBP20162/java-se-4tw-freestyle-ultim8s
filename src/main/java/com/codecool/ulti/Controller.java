@@ -67,6 +67,7 @@ public class Controller {
         players.get(1).setRole(PLAYER);
         players.get(2).setRole(PLAYER);
         bid = "pass";
+        WinCondition winCondition = new WinCondition(bid);
     }
 
     private void biding() {
@@ -101,6 +102,7 @@ public class Controller {
             System.out.println("\n\nPlayer " + players.get(witchPlayerIsBidding % 3).getName() + " must bid! Please place your bid.");
             bid = scanner.nextLine();
         }
+        winCondition = new WinCondition(bid);
     }
 
 
@@ -128,11 +130,11 @@ public class Controller {
 
     private void putTalon(Player soloist) {
         System.out.println("\n\nPlayer " + soloist.getName() + " please enter the first card to put into the 'talon:'");
-        int first = scanner.nextInt();
+        String first = scanner.nextLine();
         System.out.println("\n\nPlayer " + soloist.getName() + " please enter the second card to put into the 'talon:'");
-        int second = scanner.nextInt();
-        talon.cards.put(1, soloist.hand.remove(first));
-        talon.cards.put(2, soloist.hand.remove(second));
+        String second = scanner.nextLine();
+        talon.cards.put(1, soloist.hand.remove(Integer.parseInt(first)));
+        talon.cards.put(2, soloist.hand.remove(Integer.parseInt(second)));
         soloist.orderHand();
         soloist.printCards(soloist.getHand());
 
@@ -205,16 +207,19 @@ public class Controller {
 
     private void playGame() {
         int cardToPlay = 0;
-        String trumpColor = "";
         CardHolder table = new CardHolder();
         ArrayList<Card> hits = new ArrayList<>();
         int turnStartingPlayerIndex = players.indexOf(currentPlayer);
         System.out.println("\n\nPlayer " + players.get(turnStartingPlayerIndex).getName() + ", please enter the trump color: ");
-        scanner.nextLine();
-        trumpColor = scanner.nextLine();
+        String trumpColor = scanner.nextLine();
         CardHolder.setTrump(trumpColor.toUpperCase());
         winCondition = new WinCondition(bid);
         count2040();
+        System.out.print("\n\nPlayer " + players.get(turnStartingPlayerIndex).getName() + ", please enter the trump color: ");
+        CardHolder.setTrump(scanner.nextLine());
+        for (Player player : players) {
+            player.setPoints(hits);
+        }
         for (int turn = 1; turn < 11; turn++) {
             for (int playerNumber = turnStartingPlayerIndex; playerNumber < turnStartingPlayerIndex + 3; playerNumber++) {
                 if (hits.isEmpty()) {

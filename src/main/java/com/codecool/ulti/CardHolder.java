@@ -69,6 +69,10 @@ public class CardHolder {
             for (Card card: cards.values()) {
                 System.out.print("| _ _ _ _ |");
             }
+            System.out.println();
+            for (Card card : cards.values()) {
+                System.out.print(card.getAbsoluteValue()+"|"+card.getGameValue()+"||");
+            }
         }
 
     }
@@ -100,15 +104,16 @@ public class CardHolder {
     }
 
     private void setPoinsPass(ArrayList<Card> hits) {
-        if (!hits.isEmpty()) {
-            for(Card card:hand.values()) {
-                card.setGameValue(0);
-                if(card.getColor().equals(trump)) {
-                    card.setGameValue(card.getAbsoluteValue()+20);
-                }
-                if(card.getColor().equals(hits.get(0))) {
-                    card.setGameValue(card.getAbsoluteValue()+10);
-                }
+        for(Card card:hand.values()) {
+            card.setGameValue(0);
+            if(card.getColor().equals(trump.name())) {
+                card.setGameValue(card.getAbsoluteValue()+20);
+            }
+            if(!hits.isEmpty() && card.getColor().equals(hits.get(0).getColor())) {
+                card.setGameValue(card.getAbsoluteValue()+10);
+            }
+            else {
+                card.setGameValue(card.getAbsoluteValue());
             }
         }
     }
