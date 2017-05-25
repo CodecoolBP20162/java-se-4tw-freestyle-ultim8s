@@ -103,7 +103,7 @@ public class Controller {
             }
             witchPlayerIsBidding++;
         }
-        if (players.get((witchPlayerIsBidding)%3).getRole().equals(NOT_SET)) {
+        if (players.get((witchPlayerIsBidding) % 3).getRole().equals(NOT_SET)) {
             System.out.println("\n\nPlayer " + players.get(witchPlayerIsBidding % 3).getName() + " must bid! Please place your bid.");
             bid = scanner.nextLine();
             setPlayersRole(witchPlayerIsBidding);
@@ -304,14 +304,14 @@ public class Controller {
                         logger.info("A lap erősebb mint a felső adu");
                         canPlay = true;
                     }
-                    if(!currentPlayer.hasBiggerInHand(topCard.getAbsoluteValue(), cardToPlay.getColor())) {
+                    if (!currentPlayer.hasBiggerInHand(topCard.getAbsoluteValue(), cardToPlay.getColor())) {
                         logger.info("Nincs nagyobb adunk");
                         canPlay = true;
                     }
                 }
                 if (!topCard.getColor().equals(cardToPlay.getColor())) {
                     logger.info("A felső lap nem adu");
-                    canPlay=true;
+                    canPlay = true;
                 }
             }
             if (!currentPlayer.hasColorInHand(trump.name())) {
@@ -351,7 +351,7 @@ public class Controller {
             }
             if (topCard.getColor().equals(trump.name()) && !topCard.getColor().equals(bottomCard.getColor())) {
                 logger.info("A felső lap adu és a felső lap színe nem egyezik az alsó színével");
-                if (bottomCard.getColor().equals(cardToPlay.getColor()) ) {
+                if (bottomCard.getColor().equals(cardToPlay.getColor())) {
                     logger.info("A legalsó lap és a játszandó lap színe megegyezik.");
                     canPlay = true;
                 }

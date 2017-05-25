@@ -16,6 +16,7 @@ public class GeneralRules {
 
     /**
      * Constructor of general rules.
+     *
      * @param bid String of the actual game type.
      */
     public GeneralRules(String bid) {
@@ -53,10 +54,8 @@ public class GeneralRules {
      * Checks if the soloist succeded in his quest.
      */
     public void winCheck() {
-        for (Player player : players) {
-            if (rules.equals("pass")) {
-                winCheckPass();
-            }
+        if (rules.equals("pass")) {
+            winCheckPass();
         }
     }
 
@@ -78,23 +77,24 @@ public class GeneralRules {
                 }
                 ;
             }
-            if (player.getRole() == Player.Role.PLAYER) {
+            if (player.getRole().equals(Player.Role.PLAYER)) {
                 defenderTotal += player.getPoints();
                 if (player1 == null) {
                     player1 = player;
                 } else {
                     player2 = player;
                 }
-            } else if (player.getRole() == Player.Role.SOLOIST) {
+            } else if (player.getRole().equals(Player.Role.SOLOIST)) {
                 soloist = player;
                 winTreshold = player.getPoints();
             }
         }
         if (winTreshold > defenderTotal) {
-            System.out.println("SOLOIST: "+winTreshold+"\nDEFENDERS: "+defenderTotal+"\n\n"+ soloist.getName()+" WON!");
+            System.out.println("SOLOIST: " + winTreshold + "\nDEFENDERS: " + defenderTotal + "\n\n" + soloist.getName() + " WON!");
         } else {
-            System.out.println("SOLOIST: "+winTreshold+"\nDEFENDERS: "+defenderTotal+"\n\n"+player1.getName()+" & "+player2.getName()+" WON!");
-        };
+            System.out.println("SOLOIST: " + winTreshold + "\nDEFENDERS: " + defenderTotal + "\n\n" + player1.getName() + " & " + player2.getName() + " WON!");
+        }
+        ;
     }
 
     /**
