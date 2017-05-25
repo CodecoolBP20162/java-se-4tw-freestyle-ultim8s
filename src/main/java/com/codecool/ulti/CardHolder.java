@@ -119,7 +119,7 @@ public class CardHolder {
     }
 
     public void setPoints(ArrayList<Card> hits) {
-        String winCondition = WinCondition.getWinRules();
+        String winCondition = GeneralRules.getRules();
         switch (winCondition) {
             case "pass" : setPoinsPass(hits);
             break;

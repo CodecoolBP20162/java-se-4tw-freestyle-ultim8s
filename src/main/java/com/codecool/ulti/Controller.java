@@ -15,12 +15,12 @@ import static com.codecool.ulti.Player.Role.SOLOIST;
 public class Controller {
     private static LinkedList<Player> players = new LinkedList<Player>();
     private static Scanner scanner = new Scanner(System.in);
-    int whosePlayerTurn = 0;
-    String bid = "";
-    Deck deck = new Deck();
-    Talon talon = new Talon();
-    Player currentPlayer;
-    WinCondition winCondition;
+    private int whosePlayerTurn = 0;
+    private String bid = "";
+    private Deck deck = new Deck();
+    private Talon talon = new Talon();
+    private Player currentPlayer;
+    private GeneralRules generalRules;
 
 
     public void play() {
@@ -33,7 +33,7 @@ public class Controller {
     }
 
     private void resetPoints() {
-        for (Player player:players) {
+        for (Player player : players) {
             player.setPoints(0);
         }
     }
@@ -53,6 +53,13 @@ public class Controller {
         players.add(new Player("3) "));
     }
 
+    private void setTestBiding() {
+        players.get(0).setRole(SOLOIST);
+        players.get(1).setRole(PLAYER);
+        players.get(2).setRole(PLAYER);
+        bid = "pass";
+    }
+
     private void getPlayerNames() {
         System.out.println("Please enter the first players name: ");
         players.add(new Player(scanner.nextLine()));
@@ -62,13 +69,6 @@ public class Controller {
         players.add(new Player(scanner.nextLine()));
     }
 
-    private void setTestBiding() {
-        players.get(0).setRole(SOLOIST);
-        players.get(1).setRole(PLAYER);
-        players.get(2).setRole(PLAYER);
-        bid = "pass";
-        WinCondition winCondition = new WinCondition(bid);
-    }
 
     private void biding() {
         int witchPlayerIsBidding = whosePlayerTurn;
@@ -102,7 +102,6 @@ public class Controller {
             System.out.println("\n\nPlayer " + players.get(witchPlayerIsBidding % 3).getName() + " must bid! Please place your bid.");
             bid = scanner.nextLine();
         }
-        winCondition = new WinCondition(bid);
     }
 
 
@@ -140,84 +139,20 @@ public class Controller {
 
     }
 
-    private void count2040() {
-        for (Player player:players) {
-            Map<Integer, Card> cards = player.getHand();
-            int acornsResult = 0;
-            int leavesResult = 0;
-            int bellsResult = 0;
-            int heartsResult = 0;
-            for (Card card : cards.values()) {
-                if (card.getColor().equals(Deck.Color.ACORNS.toString()) && (card.getName().equals(Deck.Power.OVER.toString()))) {
-                    acornsResult = acornsResult + 1;
-                }
-                if (card.getColor().equals(Deck.Color.ACORNS.toString()) && (card.getName().equals(Deck.Power.KING.toString()))) {
-                    acornsResult = acornsResult + 1;
-                }
-                if (card.getColor().equals(Deck.Color.LEAVES.toString()) && (card.getName().equals(Deck.Power.OVER.toString()))) {
-                    leavesResult = leavesResult + 1;
-                }
-                if (card.getColor().equals(Deck.Color.LEAVES.toString()) && (card.getName().equals(Deck.Power.KING.toString()))) {
-                    leavesResult = leavesResult + 1;
-                }
-                if (card.getColor().equals(Deck.Color.BELLS.toString()) && (card.getName().equals(Deck.Power.OVER.toString()))) {
-                    bellsResult = bellsResult + 1;
-                }
-                if (card.getColor().equals(Deck.Color.BELLS.toString()) && (card.getName().equals(Deck.Power.KING.toString()))) {
-                    bellsResult = bellsResult + 1;
-                }
-                if (card.getColor().equals(Deck.Color.HEARTS.toString()) && (card.getName().equals(Deck.Power.OVER.toString()))) {
-                    heartsResult = heartsResult + 1;
-                }
-                if (card.getColor().equals(Deck.Color.HEARTS.toString()) && (card.getName().equals(Deck.Power.KING.toString()))) {
-                    heartsResult = heartsResult + 1;
-                }
-            }
-            if (acornsResult == 2) {
-                if (player.trump.equals(Deck.Color.ACORNS)){
-                    player.setPoints(player.getPoints()+40);
-                } else {
-                    player.setPoints(player.getPoints()+20);
-                }
-            }
-            if (bellsResult == 2) {
-                if (player.trump.equals(Deck.Color.BELLS)){
-                    player.setPoints(player.getPoints()+40);
-                } else {
-                    player.setPoints(player.getPoints()+20);
-                }
-            }
-            if (leavesResult == 2) {
-                if (player.trump.equals(Deck.Color.LEAVES)){
-                    player.setPoints(player.getPoints()+40);
-                } else {
-                    player.setPoints(player.getPoints()+20);
-                }
-            }
-            if (heartsResult == 2) {
-                if (player.trump.equals(Deck.Color.HEARTS)){
-                    player.setPoints(player.getPoints()+40);
-                } else {
-                    player.setPoints(player.getPoints()+20);
-                }
-            }
-        }
-    }
-
-
     private void playGame() {
+
         int cardToPlay = 0;
         CardHolder table = new CardHolder();
         ArrayList<Card> hits = new ArrayList<>();
         int turnStartingPlayerIndex = players.indexOf(currentPlayer);
         System.out.println("\n\nPlayer " + players.get(turnStartingPlayerIndex).getName() + ", please enter the trump color: ");
         CardHolder.setTrump(scanner.nextLine().toUpperCase());
-        winCondition = new WinCondition(bid);
-        count2040();
-        System.out.print("\n\nPlayer " + players.get(turnStartingPlayerIndex).getName() + ", please enter the trump color: ");
-        for (Player player : players) {
-            player.setPoints(hits);
+        generalRules = new GeneralRules(bid);
+
+        for (Player player: players) {
+            System.out.println(player.getPoints());
         }
+
         for (int turn = 1; turn < 11; turn++) {
             for (int playerNumber = turnStartingPlayerIndex; playerNumber < turnStartingPlayerIndex + 3; playerNumber++) {
                 if (hits.isEmpty()) {
@@ -255,32 +190,31 @@ public class Controller {
                 hits.add(currentPlayer.hand.remove(cardToPlay));
             }
             Player hitWinner = decideHitWinner(hits);
-            addHitedCardsToWinner(hits,hitWinner);
+            addHitedCardsToWinner(hits, hitWinner);
             hits.clear();
         }
-        winCondition.winCheck();
+        generalRules.winCheck();
     }
 
-    private void addHitedCardsToWinner(ArrayList<Card> hits,Player hitWinner) {
-        for (Card card:hits) {
+    private void addHitedCardsToWinner(ArrayList<Card> hits, Player hitWinner) {
+        for (Card card : hits) {
             hitWinner.addCardToHitedCards(card);
         }
     }
 
     private Player decideHitWinner(ArrayList<Card> hits) {
         Player hitWinner = null;
-        if (hits.get(0).getGameValue()>=hits.get(1).getGameValue() && hits.get(0).getGameValue()>=hits.get(2).getGameValue()) {
+        if (hits.get(0).getGameValue() >= hits.get(1).getGameValue() && hits.get(0).getGameValue() >= hits.get(2).getGameValue()) {
             int playerIndex = players.indexOf(currentPlayer);
-            hitWinner = players.get((playerIndex-2)+3 % 3);
+            hitWinner = players.get((playerIndex - 2) + 3 % 3);
         }
-        if (hits.get(1).getGameValue()>hits.get(0).getGameValue() && hits.get(1).getGameValue()>hits.get(2).getGameValue()) {
+        if (hits.get(1).getGameValue() > hits.get(0).getGameValue() && hits.get(1).getGameValue() > hits.get(2).getGameValue()) {
             int playerIndex = players.indexOf(currentPlayer);
-            hitWinner = players.get((playerIndex-1)+3 % 3);
+            hitWinner = players.get((playerIndex - 1) + 3 % 3);
         }
-        if (hits.get(2).getGameValue()>hits.get(0).getGameValue() && hits.get(2).getGameValue()>hits.get(1).getGameValue()) {
+        if (hits.get(2).getGameValue() > hits.get(0).getGameValue() && hits.get(2).getGameValue() > hits.get(1).getGameValue()) {
             hitWinner = currentPlayer;
         }
-
         return hitWinner;
     }
 }

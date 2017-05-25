@@ -74,8 +74,12 @@ public class Player extends CardHolder {
      * Sets the points of the player.
      * @param points Takes an int as a parameter.
      */
-    public void setPoints(int points) {
+    public void addPoints(int points) {
         this.points += points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     /**
