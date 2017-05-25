@@ -146,7 +146,7 @@ public class Controller {
         CardHolder.setTrump(scanner.nextLine().toUpperCase());
         generalRules = new GeneralRules(bid);
 
-        for (Player player: players) {
+        for (Player player : players) {
             System.out.println(player.getPoints());
         }
 
