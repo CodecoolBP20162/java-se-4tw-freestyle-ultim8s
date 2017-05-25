@@ -18,18 +18,15 @@ public class CardHolder {
     private List<Integer> powers = new LinkedList<>();
     private String coloring;
     public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
     /**
      * Prints the hand of the player with super fancy graphics.
      */
     public void printCards(Map<Integer, Card> cards) {
+
         if(cards.size()>0){
             int filler = 0;
 
@@ -39,55 +36,54 @@ public class CardHolder {
             }
             System.out.println();
             for (Card card: cards.values()) {
-
-                System.out.print(coloring+ " _ _ _ _ _ "+ANSI_RESET);
+                coloring = getColoring(card);
+                System.out.print(coloring+" _ _ _ _ _ "+ANSI_RESET);
             }
             System.out.println();
             for (Card card: cards.values()) {
-                System.out.print("|         |"+ANSI_RESET);
+                coloring = getColoring(card);
+                System.out.print(coloring+"|         |"+ANSI_RESET);
             }
             System.out.println();
             for (Card card: cards.values()) {
-                switch (card.getName().length()) {
-                    case 1: filler = 5; break;
-                    case 2: filler = 5; break;
+                switch (card.getColor().length()) {
                     case 3: filler = 4; break;
                     case 4: filler = 4; break;
                     case 5: filler = 3; break;
                     case 6: filler = 3; break;
                     case 7: filler = 2; break;
+                    case 8: filler = 2; break;
                 }
-                fill(filler, card.getName());
+                fill(filler, card.getColor(), coloring = getColoring(card));
             }
             System.out.println();
             for (Card card: cards.values()) {
-                System.out.print("|         |"+ANSI_RESET);
+                coloring = getColoring(card);
+                System.out.print(coloring+"|         |"+ANSI_RESET);
             }
             System.out.println();
             for (Card card: cards.values()) {
-                System.out.print("|    of   |"+ANSI_RESET);
+                coloring = getColoring(card);
+                System.out.print(coloring+"|         |"+ANSI_RESET);
             }
             System.out.println();
             for (Card card: cards.values()) {
-                System.out.print("|         |");
-            }
-            System.out.println();
-            for (Card card: cards.values()) {
-                switch (card.getColor().length()) {
+                switch (card.getName().length()) {
+                    case 3: filler = 4; break;
+                    case 4: filler = 4; break;
                     case 5: filler = 3; break;
                     case 6: filler = 3; break;
                     case 7: filler = 2; break;
+                    case 8: filler = 2; break;
                 }
-                fill(filler, card.getColor());
+                fill(filler, card.getName(), coloring = getColoring(card));
             }
             System.out.println();
             for (Card card: cards.values()) {
-                System.out.print("| _ _ _ _ |");
+                coloring = getColoring(card);
+                System.out.print(coloring+"| _ _ _ _ |"+ANSI_RESET);
             }
             System.out.println();
-            for (Card card : cards.values()) {
-                System.out.print(card.getAbsoluteValue()+"|"+card.getGameValue()+"|      |");
-            }
         }
 
     }
@@ -98,8 +94,8 @@ public class CardHolder {
      * @param filler The amount of whitespace to be left before the string.
      * @param string The name or color string for the card.
      */
-    private void fill(int filler, String string) {
-        System.out.print("|");
+    private void fill(int filler, String string, String coloring) {
+        System.out.print(coloring+"|");
         for (int i = 0; i < filler-1; i++) {
             System.out.print(" ");
         }
@@ -107,7 +103,7 @@ public class CardHolder {
         for (int i = 0; i < 10-filler-string.length(); i++) {
             System.out.print(" ");
         }
-        System.out.print("|");
+        System.out.print("|"+ANSI_RESET);
     }
 
     public static void setTrump(String string) {
@@ -117,6 +113,23 @@ public class CardHolder {
             }
         }
     }
+
+    private String getColoring(Card card) {
+        if (card.getColor().equals("MAKK")) {return ANSI_YELLOW;}
+        else if (card.getColor().equals("TÖK")) {return ANSI_BLUE;}
+        else if (card.getColor().equals("PIROS")) {return ANSI_RED;}
+        else if (card.getColor().equals("ZÖLD")) {return ANSI_GREEN;}
+        else {return null;}
+    }
+
+    private String getColoring(String string) {
+        if (string.equals("MAKK")) {return ANSI_YELLOW;}
+        else if (string.equals("TÖK")) {return ANSI_BLUE;}
+        else if (string.equals("PIROS")) {return ANSI_RED;}
+        else if (string.equals("ZÖLD")) {return ANSI_GREEN;}
+        else {return null;}
+    }
+
 
     public Map<Integer, Card> placeHits(ArrayList<Card> hits) {
         printer.clear();

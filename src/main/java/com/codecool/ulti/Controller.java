@@ -42,10 +42,12 @@ public class Controller {
     }
 
     private void initGame() {
-        //getPlayerNames();
-        setPlayerNamesForTest();
+        Welcome.printWelcome();
+        getPlayerNames();
+//        setPlayerNamesForTest();
         deck.deal();
         for (Player player : players) {
+            System.out.println("\n\nPlayer "+player.getName()+"'s cards: ");
             player.printCards(player.getHand());
         }
     }
@@ -111,7 +113,8 @@ public class Controller {
     private void handleTalon() {
         talon.cards.put(1, deck.getTalon().get(1));
         talon.cards.put(2, deck.getTalon().get(2));
-        talon.printCards(talon.cards);
+//        System.out.println("\n\nCards in the Talon: ");
+//        talon.printCards(talon.cards);
         int i = 0;
         Player soloist = null;
         while (soloist == null) {
@@ -124,8 +127,10 @@ public class Controller {
         currentPlayer.hand.put(11, talon.cards.remove(1));
         currentPlayer.hand.put(12, talon.cards.remove(2));
         currentPlayer.orderHand();
+        System.out.println("\n\nPlayer "+currentPlayer.getName()+"'s cards.");
         currentPlayer.printCards(currentPlayer.getHand());
         putTalon(currentPlayer);
+        System.out.println("\n\nCards in the Talon: ");
         talon.printCards(talon.cards);
 
     }
@@ -138,6 +143,7 @@ public class Controller {
         talon.cards.put(1, soloist.hand.remove(Integer.parseInt(first)));
         talon.cards.put(2, soloist.hand.remove(Integer.parseInt(second)));
         soloist.orderHand();
+        System.out.println("\n\nPlayer "+soloist.getName()+"'s cards: ");
         soloist.printCards(soloist.getHand());
 
     }
@@ -161,10 +167,12 @@ public class Controller {
                 if (hits.isEmpty()) {
                     printEmptyTable();
                 } else {
+                    System.out.println("\n\nCards on the table: ");
                     table.printCards(table.placeHits(hits));
                 }
                 currentPlayer = players.get(playerNumber % 3);
                 currentPlayer.orderHand();
+                System.out.println("\n\nPlayer "+currentPlayer.getName()+"'s cards: ");
                 currentPlayer.printCards(currentPlayer.getHand());
                 boolean canPlay = false;
                 while (!canPlay) {
@@ -235,7 +243,7 @@ public class Controller {
     private void showPlayersExtraPoints() {
         for (Player player : players) {
             logger.debug("Player {} has {}", player.getName(), player.getPoints());
-            System.out.println(player.getPoints());
+//            System.out.println(player.getPoints());
         }
     }
 

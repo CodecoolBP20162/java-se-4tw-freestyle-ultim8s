@@ -62,24 +62,24 @@ public class Deck extends CardHolder {
      * Color of cards.
      */
     protected enum Color {
-        BELLS,
-        ACORNS,
-        HEARTS,
-        LEAVES
+        TÖK,
+        MAKK,
+        PIROS,
+        ZÖLD
     }
 
     /**
      * Original order value of cards.
      */
     protected enum Power {
-        SEVEN(1),
-        EIGHT(2),
-        NINE(3),
-        UNDER(4),
-        OVER(5),
-        KING(6),
-        TEN(7),
-        ACE(8);
+        HETES(1),
+        NYOLCAS(2),
+        KILENCES(3),
+        ALSÓ(4),
+        FELSŐ(5),
+        KIRÁLY(6),
+        TIZES(7),
+        ÁSZ(8);
 
         private final int value;
 

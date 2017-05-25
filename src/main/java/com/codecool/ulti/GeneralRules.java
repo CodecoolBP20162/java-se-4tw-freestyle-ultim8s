@@ -60,7 +60,7 @@ public class GeneralRules {
         for (Player player : players) {
             for (Card card : player.hits()) {
                 card.resetGameValue();
-                if (card.getName().equals("TEN") || card.getName().equals("ACE")) {
+                if (card.getName().equals("TIZES") || card.getName().equals("ÁSZ")) {
                     player.addPoints(10);
                 }
                 ;
@@ -93,54 +93,54 @@ public class GeneralRules {
             int bellsResult = 0;
             int heartsResult = 0;
             for (Card card : cards.values()) {
-                if (card.getColor().equals(Deck.Color.ACORNS.toString()) && (card.getName().equals(Deck.Power.OVER.toString()))) {
+                if (card.getColor().equals(Deck.Color.MAKK.toString()) && (card.getName().equals(Deck.Power.FELSŐ.toString()))) {
                     acornsResult += 1;
                 }
-                if (card.getColor().equals(Deck.Color.ACORNS.toString()) && (card.getName().equals(Deck.Power.KING.toString()))) {
+                if (card.getColor().equals(Deck.Color.MAKK.toString()) && (card.getName().equals(Deck.Power.KIRÁLY.toString()))) {
                     acornsResult += 1;
                 }
-                if (card.getColor().equals(Deck.Color.LEAVES.toString()) && (card.getName().equals(Deck.Power.OVER.toString()))) {
+                if (card.getColor().equals(Deck.Color.ZÖLD.toString()) && (card.getName().equals(Deck.Power.FELSŐ.toString()))) {
                     leavesResult += 1;
                 }
-                if (card.getColor().equals(Deck.Color.LEAVES.toString()) && (card.getName().equals(Deck.Power.KING.toString()))) {
+                if (card.getColor().equals(Deck.Color.ZÖLD.toString()) && (card.getName().equals(Deck.Power.KIRÁLY.toString()))) {
                     leavesResult += 1;
                 }
-                if (card.getColor().equals(Deck.Color.BELLS.toString()) && (card.getName().equals(Deck.Power.OVER.toString()))) {
+                if (card.getColor().equals(Deck.Color.TÖK.toString()) && (card.getName().equals(Deck.Power.FELSŐ.toString()))) {
                     bellsResult += 1;
                 }
-                if (card.getColor().equals(Deck.Color.BELLS.toString()) && (card.getName().equals(Deck.Power.KING.toString()))) {
+                if (card.getColor().equals(Deck.Color.TÖK.toString()) && (card.getName().equals(Deck.Power.KIRÁLY.toString()))) {
                     bellsResult += 1;
                 }
-                if (card.getColor().equals(Deck.Color.HEARTS.toString()) && (card.getName().equals(Deck.Power.OVER.toString()))) {
+                if (card.getColor().equals(Deck.Color.PIROS.toString()) && (card.getName().equals(Deck.Power.FELSŐ.toString()))) {
                     heartsResult += 1;
                 }
-                if (card.getColor().equals(Deck.Color.HEARTS.toString()) && (card.getName().equals(Deck.Power.KING.toString()))) {
+                if (card.getColor().equals(Deck.Color.PIROS.toString()) && (card.getName().equals(Deck.Power.KIRÁLY.toString()))) {
                     heartsResult += 1;
                 }
             }
             if (acornsResult == 2) {
-                if (player.trump.equals(Deck.Color.ACORNS)) {
+                if (player.trump.equals(Deck.Color.MAKK)) {
                     player.addPoints(40);
                 } else {
                     player.addPoints(20);
                 }
             }
             if (bellsResult == 2) {
-                if (player.trump.equals(Deck.Color.BELLS)) {
+                if (player.trump.equals(Deck.Color.TÖK)) {
                     player.addPoints(40);
                 } else {
                     player.addPoints(20);
                 }
             }
             if (leavesResult == 2) {
-                if (player.trump.equals(Deck.Color.LEAVES)) {
+                if (player.trump.equals(Deck.Color.ZÖLD)) {
                     player.addPoints(40);
                 } else {
                     player.addPoints(20);
                 }
             }
             if (heartsResult == 2) {
-                if (player.trump.equals(Deck.Color.HEARTS)) {
+                if (player.trump.equals(Deck.Color.PIROS)) {
                     player.addPoints(40);
                 } else {
                     player.addPoints(20);
