@@ -12,6 +12,15 @@ public class CardHolder {
     private Map<Integer, Card> printer = new HashMap<Integer, Card>();
     private List<String> colors = new LinkedList<>();
     private List<Integer> powers = new LinkedList<>();
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
     /**
      * Prints the hand of the player with super fancy graphics.
      */
@@ -100,29 +109,6 @@ public class CardHolder {
             if (color.name().equals(string)) {
                 trump = color;
             }
-        }
-    }
-
-    private void setPoinsPass(ArrayList<Card> hits) {
-        for(Card card:hand.values()) {
-            card.resetGameValue();
-            if(card.getColor().equals(trump.name())) {
-                card.setGameValue(card.getAbsoluteValue()+20);
-            }
-            if(!hits.isEmpty() && card.getColor().equals(hits.get(0).getColor())) {
-                card.setGameValue(card.getAbsoluteValue()+10);
-            }
-            else {
-                card.setGameValue(card.getAbsoluteValue());
-            }
-        }
-    }
-
-    public void setPoints(ArrayList<Card> hits) {
-        String winCondition = GeneralRules.getRules();
-        switch (winCondition) {
-            case "pass" : setPoinsPass(hits);
-            break;
         }
     }
 

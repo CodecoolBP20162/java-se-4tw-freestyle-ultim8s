@@ -63,6 +63,14 @@ public class Player extends CardHolder {
         return false;
     }
 
+    public boolean hasBiggerInHand(int num) {
+        for (Card card : hand.values()) {
+            if (card.getAbsoluteValue() > num) {
+                return true;
+            }
+        } return false;
+    }
+
     /**
      *
      * @return Returns name of the player.
@@ -87,8 +95,8 @@ public class Player extends CardHolder {
         this.points += points;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
+    public void resetPoints(int points) {
+        this.points = 0;
     }
 
     /**

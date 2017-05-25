@@ -32,7 +32,7 @@ public class Controller {
 
     private void resetPoints() {
         for (Player player : players) {
-            player.setPoints(0);
+            player.addPoints(0);
         }
     }
 
@@ -164,9 +164,6 @@ public class Controller {
                 currentPlayer = players.get(playerNumber % 3);
                 currentPlayer.orderHand();
                 currentPlayer.printCards(currentPlayer.getHand());
-                for (Player player : players) {
-                    player.setPoints(hits);
-                }
                 boolean canPlay = false;
                 while (!canPlay) {
                     System.out.println("\n\nPlayer " + currentPlayer.getName() + " please enter the card number you want to play:'");
@@ -187,9 +184,13 @@ public class Controller {
                             if (topCard.getColor().equals(bottomCard.getColor())) {
                                 if (topCard.getAbsoluteValue() < cardToPlay.getAbsoluteValue()) {
                                     canPlay = true;
+                                } else if (!currentPlayer.hasBiggerInHand(topCard.getAbsoluteValue())) {
+                                    canPlay = true;
                                 }
                             } else if (topCard.getColor().equals(trump.name()) || !topCard.getColor().equals(bottomCard.getColor())) {
                                 if (bottomCard.getAbsoluteValue() < cardToPlay.getAbsoluteValue()) {
+                                    canPlay = true;
+                                } else if (!currentPlayer.hasBiggerInHand(bottomCard.getAbsoluteValue())) {
                                     canPlay = true;
                                 }
                             }
@@ -201,7 +202,10 @@ public class Controller {
                 hits.add(currentPlayer.hand.remove(cardToPlayNum));
             }
             Player hitWinner = decideHitWinner(hits);
+            turnStartingPlayerIndex = players.indexOf(hitWinner);
+            if (turn == 10) {hitWinner.addPoints(10);}
             addHitedCardsToWinner(hits, hitWinner);
+            System.out.println("Winner: " + hitWinner.getName());
             hits.clear();
         }
         generalRules.winCheck();
@@ -215,13 +219,19 @@ public class Controller {
 
     private Player decideHitWinner(ArrayList<Card> hits) {
         Player hitWinner = null;
+        for (Card hit : hits) {
+            hit.resetGameValue();
+            hit.setGameValue(hit.getAbsoluteValue());
+            if (hit.getColor().equals(trump.name())) {hit.setGameValue(20);}
+            if (hit.getColor().equals(hits.get(0).getColor())) {hit.setGameValue(10);}
+        }
         if (hits.get(0).getGameValue() >= hits.get(1).getGameValue() && hits.get(0).getGameValue() >= hits.get(2).getGameValue()) {
             int playerIndex = players.indexOf(currentPlayer);
-            hitWinner = players.get((playerIndex - 2) + 3 % 3);
+            hitWinner = players.get(((playerIndex - 2) + 3) % 3);
         }
         if (hits.get(1).getGameValue() > hits.get(0).getGameValue() && hits.get(1).getGameValue() > hits.get(2).getGameValue()) {
             int playerIndex = players.indexOf(currentPlayer);
-            hitWinner = players.get((playerIndex - 1) + 3 % 3);
+            hitWinner = players.get(((playerIndex - 1) + 3) % 3);
         }
         if (hits.get(2).getGameValue() > hits.get(0).getGameValue() && hits.get(2).getGameValue() > hits.get(1).getGameValue()) {
             hitWinner = currentPlayer;

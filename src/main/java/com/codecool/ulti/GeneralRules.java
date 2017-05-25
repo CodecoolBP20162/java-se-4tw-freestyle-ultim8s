@@ -1,7 +1,5 @@
 package com.codecool.ulti;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 
 import static com.codecool.ulti.Player.players;
@@ -40,34 +38,48 @@ public class GeneralRules {
         }
     }
 
-    public boolean winCheck() {
+    public void winCheck() {
         for (Player player : players) {
             if (rules.equals("pass")) {
-                return winCheckPass();
+                winCheckPass();
             }
         }
-        return false;
     }
 
-    private boolean winCheckPass() {
+    private void winCheckPass() {
         int defenderTotal = 0;
         int winTreshold = 0;
+        Player soloist = null;
+        Player player1 = null;
+        Player player2 = null;
 
         for (Player player : players) {
             for (Card card : player.hits()) {
-                player.setPoints(card.getGameValue());
+                card.resetGameValue();
+                if (card.getName().equals("TEN") || card.getName().equals("ACE")) {
+                    player.addPoints(10);
+                }
+                ;
             }
             if (player.getRole() == Player.Role.PLAYER) {
                 defenderTotal += player.getPoints();
+                if (player1 == null) {
+                    player1 = player;
+                } else {
+                    player2 = player;
+                }
             } else if (player.getRole() == Player.Role.SOLOIST) {
+                soloist = player;
                 winTreshold = player.getPoints();
             }
         }
         if (winTreshold > defenderTotal) {
-            return true;
-        }
-        return false;
+            System.out.println("SOLOIST: "+winTreshold+"\nDEFENDERS: "+defenderTotal+"\n\n"+ soloist.getName()+" WON!");
+        } else {
+            System.out.println("SOLOIST: "+winTreshold+"\nDEFENDERS: "+defenderTotal+"\n\n"+player1.getName()+" & "+player2.getName()+" WON!");
+        };
     }
+
 
     private void count2040() {
         for (Player player : players) {
