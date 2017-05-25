@@ -47,7 +47,7 @@ public class Player extends CardHolder {
         for (Deck.Color color : Deck.Color.values()) {
             orderer.clear();
             for (Card card : values) {
-                if (card.getColor() == color.name()) {
+                if (card.getColor().equals(color.name())) {
                     orderer.add(card);
                 }
             }
@@ -64,16 +64,16 @@ public class Player extends CardHolder {
 
     public boolean hasColorInHand(String color) {
         for (Card card: hand.values()) {
-            if (card.getColor() == color) {
+            if (card.getColor().equals(color)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean hasBiggerInHand(int num) {
+    public boolean hasBiggerInHand(int num, String color) {
         for (Card card : hand.values()) {
-            if (card.getAbsoluteValue() > num) {
+            if (card.getAbsoluteValue() > num && card.getColor().equals(color)) {
                 return true;
             }
         } return false;

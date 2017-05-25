@@ -56,7 +56,7 @@ public class Controller {
 //        setPlayerNamesForTest();
         deck.deal();
         for (Player player : players) {
-            System.out.println("\n\nPlayer "+player.getName()+"'s cards: ");
+            System.out.println("\n\nPlayer " + player.getName() + "'s cards: ");
             player.printCards(player.getHand());
         }
     }
@@ -97,27 +97,23 @@ public class Controller {
                 case "pass":
                     turnsWithoutBid++;
                     break;
-                case "contra":
-                    turnsWithoutBid = 1;
-                    break;
-                case "recontra":
-                    turnsWithoutBid = 1;
-                    break;
-                case "subcontra":
-                    turnsWithoutBid = 1;
-                    break;
                 default:
                     turnsWithoutBid = 0;
-                    players.get(witchPlayerIsBidding % 3).setRole(SOLOIST);
-                    players.get((witchPlayerIsBidding + 1) % 3).setRole(PLAYER);
-                    players.get((witchPlayerIsBidding + 2) % 3).setRole(PLAYER);
+                    setPlayersRole(witchPlayerIsBidding);
             }
             witchPlayerIsBidding++;
         }
-        if (players.get(witchPlayerIsBidding).getRole().equals(NOT_SET)) {
+        if (players.get((witchPlayerIsBidding)%3).getRole().equals(NOT_SET)) {
             System.out.println("\n\nPlayer " + players.get(witchPlayerIsBidding % 3).getName() + " must bid! Please place your bid.");
             bid = scanner.nextLine();
+            setPlayersRole(witchPlayerIsBidding);
         }
+    }
+
+    private void setPlayersRole(int witchPlayerIsBidding) {
+        players.get(witchPlayerIsBidding % 3).setRole(SOLOIST);
+        players.get((witchPlayerIsBidding + 1) % 3).setRole(PLAYER);
+        players.get((witchPlayerIsBidding + 2) % 3).setRole(PLAYER);
     }
 
     /**
@@ -140,7 +136,7 @@ public class Controller {
         currentPlayer.hand.put(11, talon.cards.remove(1));
         currentPlayer.hand.put(12, talon.cards.remove(2));
         currentPlayer.orderHand();
-        System.out.println("\n\nPlayer "+currentPlayer.getName()+"'s cards.");
+        System.out.println("\n\nPlayer " + currentPlayer.getName() + "'s cards.");
         currentPlayer.printCards(currentPlayer.getHand());
         putTalon(currentPlayer);
         System.out.println("\n\nCards in the Talon: ");
@@ -150,6 +146,7 @@ public class Controller {
 
     /**
      * Puts cards in the talon from the soloist's hand.
+     *
      * @param soloist
      */
     private void putTalon(Player soloist) {
@@ -160,7 +157,7 @@ public class Controller {
         talon.cards.put(1, soloist.hand.remove(Integer.parseInt(first)));
         talon.cards.put(2, soloist.hand.remove(Integer.parseInt(second)));
         soloist.orderHand();
-        System.out.println("\n\nPlayer "+soloist.getName()+"'s cards: ");
+        System.out.println("\n\nPlayer " + soloist.getName() + "'s cards: ");
         soloist.printCards(soloist.getHand());
 
     }
@@ -183,7 +180,7 @@ public class Controller {
 
         for (int turn = 1; turn < 11; turn++) {
             for (int playerNumber = turnStartingPlayerIndex; playerNumber < turnStartingPlayerIndex + 3; playerNumber++) {
-                logger.debug("This is {}. turn and player {} is playing", turn, players.get(playerNumber%3).getName());
+                logger.debug("This is {}. turn and player {} is playing", turn, players.get(playerNumber % 3).getName());
                 if (hits.isEmpty()) {
                     printEmptyTable();
                 } else {
@@ -192,7 +189,7 @@ public class Controller {
                 }
                 currentPlayer = players.get(playerNumber % 3);
                 currentPlayer.orderHand();
-                System.out.println("\n\nPlayer "+currentPlayer.getName()+"'s cards: ");
+                System.out.println("\n\nPlayer " + currentPlayer.getName() + "'s cards: ");
                 currentPlayer.printCards(currentPlayer.getHand());
                 boolean canPlay = false;
                 while (!canPlay) {
@@ -222,6 +219,7 @@ public class Controller {
 
     /**
      * Puts the contents of hits to the players' hit array who won the game.
+     *
      * @param hits
      * @param hitWinner
      */
@@ -233,6 +231,7 @@ public class Controller {
 
     /**
      * Decides the winner for each turn.
+     *
      * @param hits
      * @return
      */
@@ -285,6 +284,7 @@ public class Controller {
 
     /**
      * Checks if a card can be played.
+     *
      * @param hits
      * @param cardToPlayNum
      * @return
@@ -295,30 +295,73 @@ public class Controller {
         Card topCard = hits.get(hits.size() - 1);
         Card cardToPlay = currentPlayer.getHand().get(cardToPlayNum);
         if (!currentPlayer.hasColorInHand(bottomCard.getColor())) {
+            logger.info("Nincs szinünk");
             if (cardToPlay.getColor().equals(trump.name())) {
-                canPlay = true;
-                message="";
+                logger.info("Adut akarunk játszani");
+                if (topCard.getColor().equals(cardToPlay.getColor())) {
+                    logger.info("A felső lap is adu");
+                    if (topCard.getAbsoluteValue() < cardToPlay.getAbsoluteValue()) {
+                        logger.info("A lap erősebb mint a felső adu");
+                        canPlay = true;
+                    }
+                    if(!currentPlayer.hasBiggerInHand(topCard.getAbsoluteValue(), cardToPlay.getColor())) {
+                        logger.info("Nincs nagyobb adunk");
+                        canPlay = true;
+                    }
+                }
+                if (!topCard.getColor().equals(cardToPlay.getColor())) {
+                    logger.info("A felső lap nem adu");
+                    canPlay=true;
+                }
             }
             if (!currentPlayer.hasColorInHand(trump.name())) {
+                logger.info("Nincs adunk");
                 canPlay = true;
             }
         }
         if (bottomCard.getColor().equals(cardToPlay.getColor())) {
+            logger.info("Alsó lap színe egyezik a játszani kívánt színnel");
             if (topCard.getColor().equals(bottomCard.getColor())) {
+                logger.info("Alsó lap színe megegyezik a felette lévő lap színével vagy magával");
                 if (topCard.getAbsoluteValue() < cardToPlay.getAbsoluteValue()) {
-                    canPlay = true;
-                } else if (!currentPlayer.hasBiggerInHand(topCard.getAbsoluteValue())) {
+                    logger.info("A felső lap kisebb mint a kijátszani kívánt lap.");
                     canPlay = true;
                 }
-            } else if (topCard.getColor().equals(trump.name()) || !topCard.getColor().equals(bottomCard.getColor())) {
-                if (bottomCard.getAbsoluteValue() < cardToPlay.getAbsoluteValue()) {
+                if (!currentPlayer.hasBiggerInHand(topCard.getAbsoluteValue(), cardToPlay.getColor())) {
+                    logger.info("Nincs nagyobb lap mint a felső lap.");
                     canPlay = true;
-                } else if (!currentPlayer.hasBiggerInHand(bottomCard.getAbsoluteValue())) {
+                }
+                if (bottomCard.getAbsoluteValue() > topCard.getAbsoluteValue()) {
+                    if (!currentPlayer.hasBiggerInHand(bottomCard.getAbsoluteValue(), cardToPlay.getColor())) {
+                        logger.info("Nincs nagyobb lapunk mint a legalsó lap.");
+                        canPlay = true;
+                    }
+                }
+            }
+            if (!topCard.getColor().equals(trump.name()) && !topCard.getColor().equals(bottomCard.getColor())) {
+                logger.info("A felső lap nem adu és a felső lap színe nem egyezik az alsó színével");
+                if (bottomCard.getAbsoluteValue() < cardToPlay.getAbsoluteValue()) {
+                    logger.info("A legalsó lap kisebb mint a játszandó lap.");
+                    canPlay = true;
+                }
+                if (!currentPlayer.hasBiggerInHand(bottomCard.getAbsoluteValue(), cardToPlay.getColor())) {
+                    logger.info("Nincs nagyobb lapunk mint a legalsó lap.");
+                    canPlay = true;
+                }
+            }
+            if (topCard.getColor().equals(trump.name()) && !topCard.getColor().equals(bottomCard.getColor())) {
+                logger.info("A felső lap adu és a felső lap színe nem egyezik az alsó színével");
+                if (bottomCard.getColor().equals(cardToPlay.getColor()) ) {
+                    logger.info("A legalsó lap és a játszandó lap színe megegyezik.");
                     canPlay = true;
                 }
             }
         }
-        if (!canPlay) {message = "\u001B[31m"+"This card can't be played."+"\u001B[0m";} else {message="\nNext Player";}
+        if (!canPlay) {
+            message = "\u001B[31m" + "This card can't be played." + "\u001B[0m";
+        } else {
+            message = "\nNext Player";
+        }
         System.out.println(message);
         return canPlay;
     }
