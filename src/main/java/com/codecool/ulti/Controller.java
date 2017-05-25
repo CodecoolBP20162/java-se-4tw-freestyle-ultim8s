@@ -183,7 +183,7 @@ public class Controller {
 
         for (int turn = 1; turn < 11; turn++) {
             for (int playerNumber = turnStartingPlayerIndex; playerNumber < turnStartingPlayerIndex + 3; playerNumber++) {
-                logger.debug("This is {}. turn and player {} is playing", turn, players.get(playerNumber).getName());
+                logger.debug("This is {}. turn and player {} is playing", turn, players.get(playerNumber%3).getName());
                 if (hits.isEmpty()) {
                     printEmptyTable();
                 } else {
