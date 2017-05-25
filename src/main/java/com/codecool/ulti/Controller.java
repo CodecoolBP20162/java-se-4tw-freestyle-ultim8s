@@ -1,10 +1,8 @@
 package com.codecool.ulti;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
+import static com.codecool.ulti.CardHolder.trump;
 import static com.codecool.ulti.Player.Role.NOT_SET;
 import static com.codecool.ulti.Player.Role.PLAYER;
 import static com.codecool.ulti.Player.Role.SOLOIST;
@@ -140,8 +138,7 @@ public class Controller {
     }
 
     private void playGame() {
-
-        int cardToPlay = 0;
+        int cardToPlayNum = 0;
         CardHolder table = new CardHolder();
         ArrayList<Card> hits = new ArrayList<>();
         int turnStartingPlayerIndex = players.indexOf(currentPlayer);
@@ -156,6 +153,7 @@ public class Controller {
         for (int turn = 1; turn < 11; turn++) {
             for (int playerNumber = turnStartingPlayerIndex; playerNumber < turnStartingPlayerIndex + 3; playerNumber++) {
                 if (hits.isEmpty()) {
+                    System.out.println();
                     System.out.println(" _ _ _ _ _ _ _ _ _ _ _ _  ");
                     System.out.println("|                        |");
                     System.out.println("| No cards on the table  |");
@@ -166,28 +164,41 @@ public class Controller {
                 currentPlayer = players.get(playerNumber % 3);
                 currentPlayer.orderHand();
                 currentPlayer.printCards(currentPlayer.getHand());
-                currentPlayer.setPoints(hits);
+                for (Player player : players) {
+                    player.setPoints(hits);
+                }
                 boolean canPlay = false;
                 while (!canPlay) {
                     System.out.println("\n\nPlayer " + currentPlayer.getName() + " please enter the card number you want to play:'");
-                    cardToPlay = scanner.nextInt();
+                    cardToPlayNum = scanner.nextInt();
                     if (!hits.isEmpty()) {
-                        if (hits.size() == 1) {
-                            if (hits.get(0).getGameValue() < currentPlayer.getHand().get(cardToPlay).getGameValue()) {
+                        Card bottomCard = hits.get(0);
+                        Card topCard = hits.get(hits.size()-1);
+                        Card cardToPlay = currentPlayer.getHand().get(cardToPlayNum);
+                        if (!currentPlayer.hasColorInHand(bottomCard.getColor())) {
+                            if (cardToPlay.getColor().equals(trump.name())) {
+                                canPlay = true;
+                            }
+                            if (!currentPlayer.hasColorInHand(trump.name())){
                                 canPlay = true;
                             }
                         }
-                        if (hits.size() == 2) {
-                            if (hits.get(1).getGameValue() < currentPlayer.getHand().get(cardToPlay).getGameValue()) {
-                                canPlay = true;
+                        if (bottomCard.getColor().equals(cardToPlay.getColor())) {
+                            if (topCard.getColor().equals(bottomCard.getColor())) {
+                                if (topCard.getAbsoluteValue() < cardToPlay.getAbsoluteValue()) {
+                                    canPlay = true;
+                                }
+                            } else if (topCard.getColor().equals(trump.name()) || !topCard.getColor().equals(bottomCard.getColor())) {
+                                if (bottomCard.getAbsoluteValue() < cardToPlay.getAbsoluteValue()) {
+                                    canPlay = true;
+                                }
                             }
                         }
-                    }
-                    if (hits.isEmpty()) {
+                    } else {
                         canPlay = true;
                     }
                 }
-                hits.add(currentPlayer.hand.remove(cardToPlay));
+                hits.add(currentPlayer.hand.remove(cardToPlayNum));
             }
             Player hitWinner = decideHitWinner(hits);
             addHitedCardsToWinner(hits, hitWinner);

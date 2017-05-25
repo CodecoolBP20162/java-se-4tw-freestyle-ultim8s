@@ -54,6 +54,15 @@ public class Player extends CardHolder {
         }
     }
 
+    public boolean hasColorInHand(String color) {
+        for (Card card: hand.values()) {
+            if (card.getColor() == color) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      *
      * @return Returns name of the player.

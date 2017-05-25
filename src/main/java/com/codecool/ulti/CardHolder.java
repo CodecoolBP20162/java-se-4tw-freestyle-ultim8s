@@ -1,8 +1,6 @@
 package com.codecool.ulti;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by matyi on 2017.05.22..
@@ -12,6 +10,8 @@ public class CardHolder {
     public static Deck.Color trump = null;
     public Map<Integer, Card> hand = new HashMap<Integer, Card>();
     private Map<Integer, Card> printer = new HashMap<Integer, Card>();
+    private List<String> colors = new LinkedList<>();
+    private List<Integer> powers = new LinkedList<>();
     /**
      * Prints the hand of the player with super fancy graphics.
      */
@@ -71,7 +71,7 @@ public class CardHolder {
             }
             System.out.println();
             for (Card card : cards.values()) {
-                System.out.print(card.getAbsoluteValue()+"|"+card.getGameValue()+"||");
+                System.out.print(card.getAbsoluteValue()+"|"+card.getGameValue()+"|      |");
             }
         }
 
@@ -105,7 +105,7 @@ public class CardHolder {
 
     private void setPoinsPass(ArrayList<Card> hits) {
         for(Card card:hand.values()) {
-            card.setGameValue(0);
+            card.resetGameValue();
             if(card.getColor().equals(trump.name())) {
                 card.setGameValue(card.getAbsoluteValue()+20);
             }

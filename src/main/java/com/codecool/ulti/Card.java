@@ -72,6 +72,10 @@ public class Card {
     }
 
     public void setGameValue(int gameValue) {
-        this.gameValue = gameValue;
+        this.gameValue += gameValue;
+    }
+
+    public void resetGameValue() {
+        this.gameValue = 0;
     }
 }
