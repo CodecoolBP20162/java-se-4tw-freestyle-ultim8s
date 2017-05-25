@@ -23,8 +23,11 @@ public class Controller {
     private Talon talon = new Talon();
     private Player currentPlayer;
     private GeneralRules generalRules;
+    private String message = "";
 
-
+    /**
+     * Processes the main events in the game.
+     */
     public void play() {
         initGame();
         //biding();
@@ -35,12 +38,18 @@ public class Controller {
         playGame();
     }
 
+    /**
+     * Resets the points for all players to zero.
+     */
     private void resetPoints() {
         for (Player player : players) {
             player.addPoints(0);
         }
     }
 
+    /**
+     * Initializes the game.
+     */
     private void initGame() {
         Welcome.printWelcome();
         getPlayerNames();
@@ -52,12 +61,9 @@ public class Controller {
         }
     }
 
-    private void setPlayerNamesForTest() {
-        players.add(new Player("1) "));
-        players.add(new Player("2) "));
-        players.add(new Player("3) "));
-    }
-
+    /**
+     * Sets the bid to pass for player 1 for prototype.
+     */
     private void setTestBiding() {
         players.get(0).setRole(SOLOIST);
         players.get(1).setRole(PLAYER);
@@ -65,6 +71,9 @@ public class Controller {
         bid = "pass";
     }
 
+    /**
+     * Sets the name for the players.
+     */
     private void getPlayerNames() {
         System.out.println("Please enter the first players name: ");
         players.add(new Player(scanner.nextLine()));
@@ -74,7 +83,9 @@ public class Controller {
         players.add(new Player(scanner.nextLine()));
     }
 
-
+    /**
+     * The basic biding logic, not yet implemented.
+     */
     private void biding() {
         int witchPlayerIsBidding = whosePlayerTurn;
         int turnsWithoutBid = 0;
@@ -109,7 +120,9 @@ public class Controller {
         }
     }
 
-
+    /**
+     * Handles the cards in the talon.
+     */
     private void handleTalon() {
         talon.cards.put(1, deck.getTalon().get(1));
         talon.cards.put(2, deck.getTalon().get(2));
@@ -135,6 +148,10 @@ public class Controller {
 
     }
 
+    /**
+     * Puts cards in the talon from the soloist's hand.
+     * @param soloist
+     */
     private void putTalon(Player soloist) {
         System.out.println("\n\nPlayer " + soloist.getName() + " please enter the first card to put into the 'talon:'");
         String first = scanner.nextLine();
@@ -148,6 +165,9 @@ public class Controller {
 
     }
 
+    /**
+     * The basic logic for the game.
+     */
     private void playGame() {
 
         int cardToPlayNum = 0;
@@ -200,12 +220,22 @@ public class Controller {
         generalRules.winCheck();
     }
 
+    /**
+     * Puts the contents of hits to the players' hit array who won the game.
+     * @param hits
+     * @param hitWinner
+     */
     private void addHitedCardsToWinner(ArrayList<Card> hits, Player hitWinner) {
         for (Card card : hits) {
             hitWinner.addCardToHitedCards(card);
         }
     }
 
+    /**
+     * Decides the winner for each turn.
+     * @param hits
+     * @return
+     */
     private Player decideHitWinner(ArrayList<Card> hits) {
         Player hitWinner = null;
         for (Card hit : hits) {
@@ -232,6 +262,9 @@ public class Controller {
         return hitWinner;
     }
 
+    /**
+     * Prints message if there are no cards on the table.
+     */
     private void printEmptyTable() {
         System.out.println();
         System.out.println(" _ _ _ _ _ _ _ _ _ _ _ _  ");
@@ -240,6 +273,9 @@ public class Controller {
         System.out.println("|_ _ _ _ _ _ _ _ _ _ _ _ |");
     }
 
+    /**
+     * Shows the extra points that players get at the beginning of the game depending on their cards in hand.
+     */
     private void showPlayersExtraPoints() {
         for (Player player : players) {
             logger.debug("Player {} has {}", player.getName(), player.getPoints());
@@ -247,6 +283,12 @@ public class Controller {
         }
     }
 
+    /**
+     * Checks if a card can be played.
+     * @param hits
+     * @param cardToPlayNum
+     * @return
+     */
     private boolean validateCardToPlay(ArrayList<Card> hits, int cardToPlayNum) {
         boolean canPlay = false;
         Card bottomCard = hits.get(0);
@@ -255,6 +297,7 @@ public class Controller {
         if (!currentPlayer.hasColorInHand(bottomCard.getColor())) {
             if (cardToPlay.getColor().equals(trump.name())) {
                 canPlay = true;
+                message="";
             }
             if (!currentPlayer.hasColorInHand(trump.name())) {
                 canPlay = true;
@@ -275,6 +318,8 @@ public class Controller {
                 }
             }
         }
+        if (!canPlay) {message = "\u001B[31m"+"This card can't be played."+"\u001B[0m";} else {message="\nNext Player";}
+        System.out.println(message);
         return canPlay;
     }
 }

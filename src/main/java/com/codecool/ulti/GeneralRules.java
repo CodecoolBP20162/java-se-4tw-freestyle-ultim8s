@@ -14,6 +14,10 @@ public class GeneralRules {
     private static final Logger logger = LoggerFactory.getLogger(GeneralRules.class);
     private static String rules;
 
+    /**
+     * Constructor of general rules.
+     * @param bid String of the actual game type.
+     */
     public GeneralRules(String bid) {
         switch (bid) {
             case "pass":
@@ -31,6 +35,9 @@ public class GeneralRules {
         return rules;
     }
 
+    /**
+     * Method used to set bidding type.
+     */
     public void buildRules() {
         switch (rules) {
             case "pass":
@@ -42,6 +49,9 @@ public class GeneralRules {
         }
     }
 
+    /**
+     * Checks if the soloist succeded in his quest.
+     */
     public void winCheck() {
         for (Player player : players) {
             if (rules.equals("pass")) {
@@ -50,6 +60,9 @@ public class GeneralRules {
         }
     }
 
+    /**
+     * Checks if the soloist won a pass game.
+     */
     private void winCheckPass() {
         int defenderTotal = 0;
         int winTreshold = 0;
@@ -84,7 +97,9 @@ public class GeneralRules {
         };
     }
 
-
+    /**
+     * Counts the initial starting points for the hand.
+     */
     private void count2040() {
         for (Player player : players) {
             Map<Integer, Card> cards = player.getHand();

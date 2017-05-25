@@ -114,6 +114,11 @@ public class CardHolder {
         }
     }
 
+    /**
+     *
+     * @param card
+     * @return Returns the color that needs to be used to print the cards.
+     */
     private String getColoring(Card card) {
         if (card.getColor().equals("MAKK")) {return ANSI_YELLOW;}
         else if (card.getColor().equals("TÖK")) {return ANSI_BLUE;}
@@ -122,6 +127,11 @@ public class CardHolder {
         else {return null;}
     }
 
+    /**
+     *
+     * @param string
+     * @return Returns the color that needs to be used to print the cards.
+     */
     private String getColoring(String string) {
         if (string.equals("MAKK")) {return ANSI_YELLOW;}
         else if (string.equals("TÖK")) {return ANSI_BLUE;}
@@ -130,7 +140,11 @@ public class CardHolder {
         else {return null;}
     }
 
-
+    /**
+     *
+     * @param hits
+     * @return Converts arraylist to a printer map for printing.
+     */
     public Map<Integer, Card> placeHits(ArrayList<Card> hits) {
         printer.clear();
         for (Card card: hits) {
