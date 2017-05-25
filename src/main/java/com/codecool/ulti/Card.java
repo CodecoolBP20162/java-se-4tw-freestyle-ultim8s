@@ -1,9 +1,13 @@
 package com.codecool.ulti;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by peter on 2017.05.22..
  */
 public class Card {
+    private static final Logger logger = LoggerFactory.getLogger(Card.class);
 
     /**
      * The value of the card according to the game mode.

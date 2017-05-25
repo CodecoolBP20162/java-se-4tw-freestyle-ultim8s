@@ -1,5 +1,8 @@
 package com.codecool.ulti;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 
 import static com.codecool.ulti.CardHolder.trump;
@@ -11,6 +14,7 @@ import static com.codecool.ulti.Player.Role.SOLOIST;
  * Created by peter on 2017.05.23..
  */
 public class Controller {
+    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
     private static LinkedList<Player> players = new LinkedList<Player>();
     private static Scanner scanner = new Scanner(System.in);
     private int whosePlayerTurn = 0;
@@ -24,6 +28,7 @@ public class Controller {
     public void play() {
         initGame();
         //biding();
+        logger.info("Predefined biding phase for testing done.");
         setTestBiding();
         resetPoints();
         handleTalon();
@@ -138,26 +143,23 @@ public class Controller {
     }
 
     private void playGame() {
+
         int cardToPlayNum = 0;
         CardHolder table = new CardHolder();
         ArrayList<Card> hits = new ArrayList<>();
         int turnStartingPlayerIndex = players.indexOf(currentPlayer);
         System.out.println("\n\nPlayer " + players.get(turnStartingPlayerIndex).getName() + ", please enter the trump color: ");
         CardHolder.setTrump(scanner.nextLine().toUpperCase());
+        logger.debug("General rules seted with bid: {}", bid);
         generalRules = new GeneralRules(bid);
 
-        for (Player player : players) {
-            System.out.println(player.getPoints());
-        }
+        showPlayersExtraPoints();
 
         for (int turn = 1; turn < 11; turn++) {
             for (int playerNumber = turnStartingPlayerIndex; playerNumber < turnStartingPlayerIndex + 3; playerNumber++) {
+                logger.debug("This is {}. turn and player {} is playing", turn, players.get(playerNumber));
                 if (hits.isEmpty()) {
-                    System.out.println();
-                    System.out.println(" _ _ _ _ _ _ _ _ _ _ _ _  ");
-                    System.out.println("|                        |");
-                    System.out.println("| No cards on the table  |");
-                    System.out.println("|_ _ _ _ _ _ _ _ _ _ _ _ |");
+                    printEmptyTable();
                 } else {
                     table.printCards(table.placeHits(hits));
                 }
@@ -169,32 +171,7 @@ public class Controller {
                     System.out.println("\n\nPlayer " + currentPlayer.getName() + " please enter the card number you want to play:'");
                     cardToPlayNum = scanner.nextInt();
                     if (!hits.isEmpty()) {
-                        Card bottomCard = hits.get(0);
-                        Card topCard = hits.get(hits.size()-1);
-                        Card cardToPlay = currentPlayer.getHand().get(cardToPlayNum);
-                        if (!currentPlayer.hasColorInHand(bottomCard.getColor())) {
-                            if (cardToPlay.getColor().equals(trump.name())) {
-                                canPlay = true;
-                            }
-                            if (!currentPlayer.hasColorInHand(trump.name())){
-                                canPlay = true;
-                            }
-                        }
-                        if (bottomCard.getColor().equals(cardToPlay.getColor())) {
-                            if (topCard.getColor().equals(bottomCard.getColor())) {
-                                if (topCard.getAbsoluteValue() < cardToPlay.getAbsoluteValue()) {
-                                    canPlay = true;
-                                } else if (!currentPlayer.hasBiggerInHand(topCard.getAbsoluteValue())) {
-                                    canPlay = true;
-                                }
-                            } else if (topCard.getColor().equals(trump.name()) || !topCard.getColor().equals(bottomCard.getColor())) {
-                                if (bottomCard.getAbsoluteValue() < cardToPlay.getAbsoluteValue()) {
-                                    canPlay = true;
-                                } else if (!currentPlayer.hasBiggerInHand(bottomCard.getAbsoluteValue())) {
-                                    canPlay = true;
-                                }
-                            }
-                        }
+                        canPlay = validateCardToPlay(hits, cardToPlayNum);
                     } else {
                         canPlay = true;
                     }
@@ -202,8 +179,12 @@ public class Controller {
                 hits.add(currentPlayer.hand.remove(cardToPlayNum));
             }
             Player hitWinner = decideHitWinner(hits);
+            logger.debug("Hit winning player: {}", hitWinner.getName());
             turnStartingPlayerIndex = players.indexOf(hitWinner);
-            if (turn == 10) {hitWinner.addPoints(10);}
+            if (turn == 10) {
+                logger.info("Added 10 point to player {} for the last hit.", hitWinner.getName());
+                hitWinner.addPoints(10);
+            }
             addHitedCardsToWinner(hits, hitWinner);
             System.out.println("Winner: " + hitWinner.getName());
             hits.clear();
@@ -222,8 +203,12 @@ public class Controller {
         for (Card hit : hits) {
             hit.resetGameValue();
             hit.setGameValue(hit.getAbsoluteValue());
-            if (hit.getColor().equals(trump.name())) {hit.setGameValue(20);}
-            if (hit.getColor().equals(hits.get(0).getColor())) {hit.setGameValue(10);}
+            if (hit.getColor().equals(trump.name())) {
+                hit.setGameValue(20);
+            }
+            if (hit.getColor().equals(hits.get(0).getColor())) {
+                hit.setGameValue(10);
+            }
         }
         if (hits.get(0).getGameValue() >= hits.get(1).getGameValue() && hits.get(0).getGameValue() >= hits.get(2).getGameValue()) {
             int playerIndex = players.indexOf(currentPlayer);
@@ -237,5 +222,51 @@ public class Controller {
             hitWinner = currentPlayer;
         }
         return hitWinner;
+    }
+
+    private void printEmptyTable() {
+        System.out.println();
+        System.out.println(" _ _ _ _ _ _ _ _ _ _ _ _  ");
+        System.out.println("|                        |");
+        System.out.println("| No cards on the table  |");
+        System.out.println("|_ _ _ _ _ _ _ _ _ _ _ _ |");
+    }
+
+    private void showPlayersExtraPoints() {
+        for (Player player : players) {
+            logger.debug("Player {} has {}", player.getName(), player.getPoints());
+            System.out.println(player.getPoints());
+        }
+    }
+
+    private boolean validateCardToPlay(ArrayList<Card> hits, int cardToPlayNum) {
+        boolean canPlay = false;
+        Card bottomCard = hits.get(0);
+        Card topCard = hits.get(hits.size() - 1);
+        Card cardToPlay = currentPlayer.getHand().get(cardToPlayNum);
+        if (!currentPlayer.hasColorInHand(bottomCard.getColor())) {
+            if (cardToPlay.getColor().equals(trump.name())) {
+                canPlay = true;
+            }
+            if (!currentPlayer.hasColorInHand(trump.name())) {
+                canPlay = true;
+            }
+        }
+        if (bottomCard.getColor().equals(cardToPlay.getColor())) {
+            if (topCard.getColor().equals(bottomCard.getColor())) {
+                if (topCard.getAbsoluteValue() < cardToPlay.getAbsoluteValue()) {
+                    canPlay = true;
+                } else if (!currentPlayer.hasBiggerInHand(topCard.getAbsoluteValue())) {
+                    canPlay = true;
+                }
+            } else if (topCard.getColor().equals(trump.name()) || !topCard.getColor().equals(bottomCard.getColor())) {
+                if (bottomCard.getAbsoluteValue() < cardToPlay.getAbsoluteValue()) {
+                    canPlay = true;
+                } else if (!currentPlayer.hasBiggerInHand(bottomCard.getAbsoluteValue())) {
+                    canPlay = true;
+                }
+            }
+        }
+        return canPlay;
     }
 }

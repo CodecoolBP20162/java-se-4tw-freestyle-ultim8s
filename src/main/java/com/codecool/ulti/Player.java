@@ -1,11 +1,15 @@
 package com.codecool.ulti;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 
 /**
  * Created by peter on 2017.05.22..
  */
 public class Player extends CardHolder {
+    private static final Logger logger = LoggerFactory.getLogger(Player.class);
 
     static final Player[] players = new Player[3];
 

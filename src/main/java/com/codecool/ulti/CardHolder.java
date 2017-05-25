@@ -1,11 +1,15 @@
 package com.codecool.ulti;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 
 /**
  * Created by matyi on 2017.05.22..
  */
 public class CardHolder {
+    private static final Logger logger = LoggerFactory.getLogger(CardHolder.class);
 
     public static Deck.Color trump = null;
     public Map<Integer, Card> hand = new HashMap<Integer, Card>();

@@ -1,5 +1,8 @@
 package com.codecool.ulti;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Map;
 
 import static com.codecool.ulti.Player.players;
@@ -8,6 +11,7 @@ import static com.codecool.ulti.Player.players;
  * Created by matyi on 2017.05.23..
  */
 public class GeneralRules {
+    private static final Logger logger = LoggerFactory.getLogger(GeneralRules.class);
     private static String rules;
 
     public GeneralRules(String bid) {

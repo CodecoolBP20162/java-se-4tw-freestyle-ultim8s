@@ -1,11 +1,15 @@
 package com.codecool.ulti;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 
 /**
  * Created by peter on 2017.05.22..
  */
 public class Deck extends CardHolder {
+    private static final Logger logger = LoggerFactory.getLogger(Deck.class);
 
     private static Stack shuffledDeck = new Stack();
     Random random = new Random();
