@@ -211,12 +211,10 @@ public class Controller {
         ArrayList<Card> hits = new ArrayList<>();
         int turnStartingPlayerIndex = players.indexOf(currentPlayer);
         System.out.println("\n\nPlayer " + players.get(turnStartingPlayerIndex).getName() + ", please enter the trump color: ");
-        String trumpColor = scanner.nextLine();
-        CardHolder.setTrump(trumpColor.toUpperCase());
+        CardHolder.setTrump(scanner.nextLine().toUpperCase());
         winCondition = new WinCondition(bid);
         count2040();
         System.out.print("\n\nPlayer " + players.get(turnStartingPlayerIndex).getName() + ", please enter the trump color: ");
-        CardHolder.setTrump(scanner.nextLine());
         for (Player player : players) {
             player.setPoints(hits);
         }
